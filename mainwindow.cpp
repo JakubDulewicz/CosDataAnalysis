@@ -10,6 +10,8 @@ MainWindow::MainWindow(QWidget *parent)
     _fileManager.setParent(this);
     _lineSeries1 = new QLineSeries();
     _chart = new QChart();
+
+
 }
 
 MainWindow::~MainWindow()
@@ -27,9 +29,24 @@ void MainWindow::on_pushButton_clicked()
 
 }
 
+void MainWindow::on_pushButton_2_clicked()
+{
+    createChart();
+    _chart->addSeries(_lineSeries1);
+    _chart->createDefaultAxes();
+    _chart->setTitle("ZIOB");
+
+    ui->chartView->setChart(_chart);
+    ui->chartView->setRenderHint(QPainter::Antialiasing);
+}
+
+
 void MainWindow::createChart()
 {
-
+    foreach(const QPointF &point, _series1) {
+        qDebug() << point;
+       _lineSeries1->append(point);
+    }
 }
 
 void MainWindow::loadFileDataToTable()
@@ -51,7 +68,7 @@ void MainWindow::loadFileDataToTable()
        foreach (const QString &value, recordSplit)
        {
            QTableWidgetItem *item = new QTableWidgetItem(value);
-           if((currentRow >= 1) && (currentColumn >= 2))
+           if((currentRow >= 2) && (currentColumn >= 2))
            {
                qDebug() << currentColumn << "CURRENT COLUMN";
                qDebug() << currentRow << "CURRENT ROW";

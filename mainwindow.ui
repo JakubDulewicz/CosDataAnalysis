@@ -7,7 +7,7 @@
     <x>0</x>
     <y>0</y>
     <width>1200</width>
-    <height>800</height>
+    <height>870</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -20,7 +20,7 @@
       <x>20</x>
       <y>160</y>
       <width>1151</width>
-      <height>261</height>
+      <height>211</height>
      </rect>
     </property>
    </widget>
@@ -49,17 +49,36 @@
      </rect>
     </property>
     <property name="text">
-     <string>PushButton</string>
+     <string>DANE</string>
     </property>
    </widget>
-   <widget class="QChartView" name="chart">
+   <widget class="QChartView" name="chartView">
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>440</y>
+      <y>410</y>
       <width>1151</width>
-      <height>291</height>
+      <height>311</height>
      </rect>
+    </property>
+    <property name="sizePolicy">
+     <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+      <horstretch>0</horstretch>
+      <verstretch>0</verstretch>
+     </sizepolicy>
+    </property>
+   </widget>
+   <widget class="QPushButton" name="pushButton_2">
+    <property name="geometry">
+     <rect>
+      <x>500</x>
+      <y>740</y>
+      <width>161</width>
+      <height>81</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>WYKRES</string>
     </property>
    </widget>
   </widget>
