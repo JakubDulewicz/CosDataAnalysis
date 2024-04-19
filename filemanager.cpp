@@ -1,22 +1,19 @@
 #include "filemanager.h"
-#include "QDebug"
-#include "QCoreApplication"
-FileManager::FileManager(QObject *parent)
-    : QObject{parent}
+#include <QDebug>
+#include <QCoreApplication>
+FileManager::FileManager(QWidget *parent)
+    : QWidget{parent}
 {
 
 }
 
-void FileManager::loadDataFromFile()
+QString FileManager::loadDataFromFile()
 {
-    qDebug() << "POCZATEK";
-    QString filePath = QCoreApplication::applicationDirPath() + "/krzywaF.csv";
-    qDebug() << filePath;
+    QString filePath = QFileDialog::getOpenFileName(this,"Wybierz plik",QDir::currentPath(),"Pliki CSV (*.csv);;Wszystkie pliki (*)");
     _csvFile.setFileName(filePath);
     if(_csvFile.open(QIODevice::ReadOnly))
     {
-        qDebug() << "SRODEK";
-        QTextStream stream(&_csvFile);
+        QTextStream stream (&_csvFile);
         while(stream.atEnd() == false)
         {
             QString data = stream.readLine();
@@ -25,7 +22,7 @@ void FileManager::loadDataFromFile()
     }
     else
     {
-        qDebug() << "Błąd podczas otwierania pliku:" << _csvFile.errorString();
+        qDebug() << _csvFile.errorString();
     }
-
+    return filePath;
 }

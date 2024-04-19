@@ -6,6 +6,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    _fileManager.setParent(this);
 }
 
 MainWindow::~MainWindow()
@@ -16,6 +17,7 @@ MainWindow::~MainWindow()
 
 void MainWindow::on_pushButton_clicked()
 {
-    _fileManager.loadDataFromFile();
+   QString path = _fileManager.loadDataFromFile();
+   ui->filePath->setText(path);
 }
 

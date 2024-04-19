@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>800</width>
-    <height>600</height>
+    <width>1058</width>
+    <height>674</height>
    </rect>
   </property>
   <property name="windowTitle">
@@ -17,24 +17,24 @@
    <widget class="QTableWidget" name="tableWidget">
     <property name="geometry">
      <rect>
-      <x>480</x>
-      <y>160</y>
-      <width>291</width>
-      <height>211</height>
+      <x>400</x>
+      <y>90</y>
+      <width>641</width>
+      <height>421</height>
      </rect>
     </property>
    </widget>
    <widget class="QChartView" name="chart">
     <property name="geometry">
      <rect>
-      <x>110</x>
+      <x>90</x>
       <y>180</y>
       <width>256</width>
       <height>192</height>
      </rect>
     </property>
    </widget>
-   <widget class="QWidget" name="">
+   <widget class="QWidget" name="layoutWidget">
     <property name="geometry">
      <rect>
       <x>110</x>
@@ -45,7 +45,7 @@
     </property>
     <layout class="QHBoxLayout" name="horizontalLayout">
      <item>
-      <widget class="QLineEdit" name="lineEdit"/>
+      <widget class="QLineEdit" name="filePath"/>
      </item>
      <item>
       <widget class="QPushButton" name="pushButton">
@@ -62,7 +62,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>800</width>
+     <width>1058</width>
      <height>21</height>
     </rect>
    </property>
