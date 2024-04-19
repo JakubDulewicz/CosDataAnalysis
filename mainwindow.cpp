@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "QDebug"
 
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
@@ -7,6 +8,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     _fileManager.setParent(this);
+    _lineSeries1 = new QLineSeries();
+    _chart = new QChart();
 }
 
 MainWindow::~MainWindow()
@@ -24,6 +27,11 @@ void MainWindow::on_pushButton_clicked()
 
 }
 
+void MainWindow::createChart()
+{
+
+}
+
 void MainWindow::loadFileDataToTable()
 {
     ui->tableData->setRowCount(_fileManager.dataList().size());
@@ -34,16 +42,45 @@ void MainWindow::loadFileDataToTable()
     int currentRow = 0;
     int currentColumn = 0;
 
-    foreach (const QString &record, _fileManager.dataList()) {
+    foreach (const QString &record, _fileManager.dataList())
+    {
        QStringList recordSplit = record.split(";");
-       currentRow++;
        currentColumn = 0;
-       foreach (const QString &value, recordSplit) {
+
+
+       foreach (const QString &value, recordSplit)
+       {
            QTableWidgetItem *item = new QTableWidgetItem(value);
+           if((currentRow >= 1) && (currentColumn >= 2))
+           {
+               qDebug() << currentColumn << "CURRENT COLUMN";
+               qDebug() << currentRow << "CURRENT ROW";
+
+               QString adjustedValue = value;
+               adjustedValue = adjustedValue.replace(',','.');
+               double numericValue = adjustedValue.toDouble();
+
+               //It look like a piece of shit and indead it's a shit
+               QPointF point(currentRow,numericValue);
+               switch (currentColumn) {
+               case 2: _series1.append(point); break;
+               case 3: _series2.append(point); break;
+               case 4: _series3.append(point); break;
+               case 5: _series4.append(point); break;
+               case 6: _series5.append(point); break;
+               case 7: _series6.append(point); break;
+               default:
+                   break;
+               }
+
+           }
            ui->tableData->setItem(currentRow,currentColumn,item);
            currentColumn++;
        }
+       currentRow++;
     }
+    qDebug() << _series1;
+
 }
 
 

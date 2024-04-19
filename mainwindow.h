@@ -3,6 +3,9 @@
 
 #include <QMainWindow>
 #include "filemanager.h"
+#include "QVector"
+#include "QPair"
+#include "QtCharts"
 QT_BEGIN_NAMESPACE
 namespace Ui { class MainWindow; }
 QT_END_NAMESPACE
@@ -23,7 +26,18 @@ private:
     FileManager _fileManager;
     int _tableColumnNumber;
     int _tableRowNumber;
+    //TO DO - Pack this to QVector<QVector<QPoint>>
+    QVector<QPointF> _series1;
+    QVector<QPointF> _series2;
+    QVector<QPointF> _series3;
+    QVector<QPointF> _series4;
+    QVector<QPointF> _series5;
+    QVector<QPointF> _series6;
 
+    QChart *_chart;
+    QLineSeries *_lineSeries1;
+
+    void createChart();
     void loadFileDataToTable();
     int calculateColumnNumber();
 };
