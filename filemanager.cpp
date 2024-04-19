@@ -18,6 +18,7 @@ QString FileManager::loadDataFromFile()
         {
             QString data = stream.readLine();
             qDebug() << data;
+            _dataList.append(data);
         }
     }
     else
@@ -25,4 +26,9 @@ QString FileManager::loadDataFromFile()
         qDebug() << _csvFile.errorString();
     }
     return filePath;
+}
+
+QStringList FileManager::dataList() const
+{
+    return _dataList;
 }

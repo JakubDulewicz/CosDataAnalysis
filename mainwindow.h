@@ -21,5 +21,10 @@ private slots:
 private:
     Ui::MainWindow *ui;
     FileManager _fileManager;
+    int _tableColumnNumber;
+    int _tableRowNumber;
+
+    void loadFileDataToTable();
+    int calculateColumnNumber();
 };
 #endif // MAINWINDOW_H
