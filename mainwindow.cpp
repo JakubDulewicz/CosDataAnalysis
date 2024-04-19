@@ -8,9 +8,10 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     _fileManager.setParent(this);
-    _lineSeries1 = new QLineSeries();
-    _chart = new QChart();
 
+    for (int i = 0; i < 6; ++i)
+        _lineSeries.append(new QLineSeries());
+    _chart = new QChart();
 
 }
 
@@ -32,9 +33,15 @@ void MainWindow::on_pushButton_clicked()
 void MainWindow::on_pushButton_2_clicked()
 {
     createChart();
-    _chart->addSeries(_lineSeries1);
+    int i = 1;
+    foreach(QLineSeries *series, _lineSeries) {
+        _chart->addSeries(series);
+        series->setName("Seria " + i);
+        i++;
+    }
+    _chart->setTitle("Wykres");
     _chart->createDefaultAxes();
-    _chart->setTitle("ZIOB");
+
 
     ui->chartView->setChart(_chart);
     ui->chartView->setRenderHint(QPainter::Antialiasing);
@@ -43,10 +50,32 @@ void MainWindow::on_pushButton_2_clicked()
 
 void MainWindow::createChart()
 {
+    //MY EYE OUTCH
     foreach(const QPointF &point, _series1) {
         qDebug() << point;
-       _lineSeries1->append(point);
+        _lineSeries.at(0)->append(point);
     }
+    foreach(const QPointF &point, _series2) {
+        qDebug() << point;
+        _lineSeries.at(1)->append(point);
+    }
+    foreach(const QPointF &point, _series3) {
+        qDebug() << point;
+        _lineSeries.at(2)->append(point);
+    }
+    foreach(const QPointF &point, _series4) {
+        qDebug() << point;
+        _lineSeries.at(3)->append(point);
+    }
+    foreach(const QPointF &point, _series5) {
+        qDebug() << point;
+        _lineSeries.at(4)->append(point);
+    }
+    foreach(const QPointF &point, _series6) {
+        qDebug() << point;
+        _lineSeries.at(5)->append(point);
+    }
+
 }
 
 void MainWindow::loadFileDataToTable()
