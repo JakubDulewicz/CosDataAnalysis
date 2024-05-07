@@ -21,6 +21,21 @@ public:
     QVector<QLineSeries *> lineSeries() const;
     void setLineSeries(QVector<QLineSeries *> &newLineSeries);
 
+    void setSeriesVisible(int seriesNumber, bool visible);
+
+private slots:
+    void on_checkBoxSeries1_stateChanged(int arg);
+
+    void on_checkBoxSeries2_stateChanged(int arg1);
+
+    void on_checkBoxSeries3_stateChanged(int arg1);
+
+    void on_checkBoxSeries4_stateChanged(int arg1);
+
+    void on_checkBoxSeries5_stateChanged(int arg1);
+
+    void on_checkBoxSeries6_stateChanged(int arg1);
+
 private:
     Ui::chartDialog *ui;
     QVector<QLineSeries*> _lineSeries;

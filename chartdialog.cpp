@@ -43,3 +43,47 @@ void chartDialog::setLineSeries(QVector<QLineSeries *> &newLineSeries)
     qDebug() << newLineSeries.at(0)->count();
     _lineSeries = newLineSeries;
 }
+
+void chartDialog::setSeriesVisible(int seriesNumber, bool visible)
+{
+    QLineSeries *series = qobject_cast<QLineSeries*>(_chart->series().at(seriesNumber));
+    if (series)
+        series->setVisible(visible);
+}
+
+
+void chartDialog::on_checkBoxSeries1_stateChanged(int arg1)
+{
+    setSeriesVisible(0, arg1);
+}
+
+
+void chartDialog::on_checkBoxSeries2_stateChanged(int arg1)
+{
+    setSeriesVisible(1, arg1);
+}
+
+
+void chartDialog::on_checkBoxSeries3_stateChanged(int arg1)
+{
+    setSeriesVisible(2, arg1);
+}
+
+
+void chartDialog::on_checkBoxSeries4_stateChanged(int arg1)
+{
+    setSeriesVisible(3, arg1);
+}
+
+
+void chartDialog::on_checkBoxSeries5_stateChanged(int arg1)
+{
+    setSeriesVisible(4, arg1);
+}
+
+
+void chartDialog::on_checkBoxSeries6_stateChanged(int arg1)
+{
+    setSeriesVisible(5, arg1);
+}
+
