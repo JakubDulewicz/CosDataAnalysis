@@ -1,5 +1,6 @@
 #include "chartdialog.h"
 #include "ui_chartdialog.h"
+#include "QString"
 
 chartDialog::chartDialog(QWidget *parent) :
     QDialog(parent),
@@ -21,7 +22,8 @@ void chartDialog::prepareChart()
     int i = 1;
     foreach(QLineSeries *series, _lineSeries) {
         _chart->addSeries(series);
-        series->setName("Seria " /*+ i*/);
+        QString seriesName = "Seria " + QString::number(i);
+        series->setName(seriesName);
         i++;
     }
     _chart->setTitle("Wykres");
