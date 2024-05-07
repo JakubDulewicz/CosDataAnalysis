@@ -38,7 +38,6 @@ private:
 
     QChart *_chart;
     QVector<QLineSeries*> _lineSeries;
-    QLineSeries *_lineSeries1;
 
     void createChart();
     void loadFileDataToTable();

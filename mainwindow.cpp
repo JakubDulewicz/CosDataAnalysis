@@ -1,5 +1,6 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
+#include "chartdialog.h"
 #include "QDebug"
 
 MainWindow::MainWindow(QWidget *parent)
@@ -12,6 +13,8 @@ MainWindow::MainWindow(QWidget *parent)
     for (int i = 0; i < 6; ++i)
         _lineSeries.append(new QLineSeries());
     _chart = new QChart();
+
+    ui->tableData->setEditTriggers(QAbstractItemView::DoubleClicked | QAbstractItemView::EditKeyPressed);
 
 }
 
@@ -33,18 +36,11 @@ void MainWindow::on_pushButton_clicked()
 void MainWindow::on_pushButton_2_clicked()
 {
     createChart();
-    int i = 1;
-    foreach(QLineSeries *series, _lineSeries) {
-        _chart->addSeries(series);
-        series->setName("Seria " + i);
-        i++;
-    }
-    _chart->setTitle("Wykres");
-    _chart->createDefaultAxes();
-
-
-    ui->chartView->setChart(_chart);
-    ui->chartView->setRenderHint(QPainter::Antialiasing);
+    chartDialog dialog;
+    dialog.setLineSeries(_lineSeries);
+    qDebug() << dialog.lineSeries().at(0)->count();
+    dialog.prepareChart();
+    dialog.exec();
 }
 
 
@@ -97,8 +93,8 @@ void MainWindow::loadFileDataToTable()
        foreach (const QString &value, recordSplit)
        {
            QTableWidgetItem *item = new QTableWidgetItem(value);
-           if((currentRow >= 2) && (currentColumn >= 2))
-           {
+           //if((currentRow >= 2) && (currentColumn >= 2))
+           //{
                qDebug() << currentColumn << "CURRENT COLUMN";
                qDebug() << currentRow << "CURRENT ROW";
 
@@ -119,7 +115,7 @@ void MainWindow::loadFileDataToTable()
                    break;
                }
 
-           }
+           //}
            ui->tableData->setItem(currentRow,currentColumn,item);
            currentColumn++;
        }
