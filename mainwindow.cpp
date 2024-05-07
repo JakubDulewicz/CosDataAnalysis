@@ -38,7 +38,6 @@ void MainWindow::on_pushButton_2_clicked()
     createChart();
     chartDialog dialog;
     dialog.setLineSeries(_lineSeries);
-    qDebug() << dialog.lineSeries().at(0)->count();
     dialog.prepareChart();
     dialog.exec();
 }

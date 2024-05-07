@@ -29,6 +29,25 @@ void chartDialog::prepareChart()
     _chart->setTitle("Wykres");
     _chart->createDefaultAxes();
 
+    QValueAxis *xAxis = qobject_cast<QValueAxis *>(_chart->axes(Qt::Horizontal).at(0));
+    QValueAxis *yAxis = qobject_cast<QValueAxis *>(_chart->axes(Qt::Vertical).at(0));
+    xAxisMin = xAxis->min();
+    xAxisMax = xAxis->max();
+    yAxisMin = yAxis->min();
+    yAxisMax = yAxis->max();
+
+    ui->doubleSpinBoxXAxisMin->setValue(xAxisMin);
+    ui->doubleSpinBoxXAxisMax->setValue(xAxisMax);
+    ui->doubleSpinBoxYAxisMin->setValue(yAxisMin);
+    ui->doubleSpinBoxYAxisMax->setValue(yAxisMax);
+
+    ui->doubleSpinBoxXAxisMin->setMinimum(xAxisMin);
+    ui->doubleSpinBoxXAxisMax->setMaximum(xAxisMax);
+    ui->doubleSpinBoxYAxisMin->setMinimum(yAxisMin);
+    ui->doubleSpinBoxYAxisMax->setMaximum(yAxisMax);
+
+
+
     ui->chartView->setChart(_chart);
     ui->chartView->setRenderHint(QPainter::Antialiasing);
 }
@@ -85,5 +104,33 @@ void chartDialog::on_checkBoxSeries5_stateChanged(int arg1)
 void chartDialog::on_checkBoxSeries6_stateChanged(int arg1)
 {
     setSeriesVisible(5, arg1);
+}
+
+
+void chartDialog::on_doubleSpinBoxXAxisMin_valueChanged(double arg1)
+{
+    xAxisMin = arg1;
+    _chart->axisX()->setMin(xAxisMin);
+}
+
+
+void chartDialog::on_doubleSpinBoxXAxisMax_valueChanged(double arg1)
+{
+    xAxisMax = arg1;
+    _chart->axisX()->setMax(xAxisMax);
+}
+
+
+void chartDialog::on_doubleSpinBoxYAxisMin_valueChanged(double arg1)
+{
+    yAxisMin = arg1;
+    _chart->axisY()->setMin(yAxisMin);
+}
+
+
+void chartDialog::on_doubleSpinBoxYAxisMax_valueChanged(double arg1)
+{
+    yAxisMax = arg1;
+    _chart->axisY()->setMax(yAxisMax);
 }
 

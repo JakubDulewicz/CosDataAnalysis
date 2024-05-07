@@ -36,10 +36,23 @@ private slots:
 
     void on_checkBoxSeries6_stateChanged(int arg1);
 
+    void on_doubleSpinBoxXAxisMin_valueChanged(double arg1);
+
+    void on_doubleSpinBoxXAxisMax_valueChanged(double arg1);
+
+    void on_doubleSpinBoxYAxisMin_valueChanged(double arg1);
+
+    void on_doubleSpinBoxYAxisMax_valueChanged(double arg1);
+
 private:
     Ui::chartDialog *ui;
     QVector<QLineSeries*> _lineSeries;
     QChart *_chart;
+
+    double xAxisMin;
+    double xAxisMax;
+    double yAxisMin;
+    double yAxisMax;
 };
 
 #endif // CHARTDIALOG_H

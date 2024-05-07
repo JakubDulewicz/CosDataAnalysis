@@ -28,6 +28,7 @@ private:
     FileManager _fileManager;
     int _tableColumnNumber;
     int _tableRowNumber;
+
     //TO DO - Pack this to QVector<QVector<QPoint>>
     QVector<QPointF> _series1;
     QVector<QPointF> _series2;
