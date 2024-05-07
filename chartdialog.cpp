@@ -35,6 +35,10 @@ void chartDialog::prepareChart()
 
     QValueAxis *xAxis = qobject_cast<QValueAxis *>(_chart->axes(Qt::Horizontal).at(0));
     QValueAxis *yAxis = qobject_cast<QValueAxis *>(_chart->axes(Qt::Vertical).at(0));
+
+    xAxis->setTitleText("Numer pomiaru");
+    yAxis->setTitleText("Stężenie wskaźnika, μS");
+
     xAxisMin = xAxis->min();
     xAxisMax = xAxis->max();
     yAxisMin = yAxis->min();
@@ -61,8 +65,17 @@ QVector<QLineSeries *> chartDialog::lineSeries() const
 
 void chartDialog::setLineSeries(QVector<QLineSeries *> &newLineSeries)
 {
-    qDebug() << newLineSeries.at(0)->count();
     _lineSeries = newLineSeries;
+}
+
+QVector<QLineSeries *> chartDialog::untouchedLineSeries() const
+{
+    return _untouchedLineSeries;
+}
+
+void chartDialog::setUntouchedLineSeries(const QVector<QLineSeries *> &newUntouchedLineSeries)
+{
+    _untouchedLineSeries = newUntouchedLineSeries;
 }
 
 void chartDialog::setSeriesVisible(int seriesNumber, bool visible)
@@ -70,6 +83,44 @@ void chartDialog::setSeriesVisible(int seriesNumber, bool visible)
     QLineSeries *series = qobject_cast<QLineSeries*>(_chart->series().at(seriesNumber));
     if (series)
         series->setVisible(visible);
+}
+
+bool chartDialog::checkStandardDeviationForFirstPoint()
+{
+    for (int i = 0; i < 6; ++i)
+    {
+        QLineSeries *series = qobject_cast<QLineSeries*>(_chart->series().at(i));
+        if(series)
+        {
+            if(series->count() >= 6)
+            {
+                QPointF potentialError = series->points().first();
+                double sum = 0;
+                double mean;
+                double squerdiff;
+
+                for (int i = 1; i < 6; ++i)
+                {
+                    double value = series->points().at(i).y();
+                    sum += value;
+                }
+                mean = sum/5;
+
+                for (int i = 1; i < 6; ++i)
+                {
+                    double diff = series->points().at(i).y() - mean;
+                    squerdiff += diff*diff;
+                }
+
+                double variance = squerdiff/5;
+                double deviation = sqrt(variance);
+
+                if(potentialError.y() < (mean - 2*deviation) || potentialError.y() > (mean + 2*deviation))
+                    return true;
+            }
+        }
+    }
+    return false;
 }
 
 
@@ -173,4 +224,26 @@ void chartDialog::on_pushButtonAutoAdjustment_clicked()
     ui->doubleSpinBoxYAxisMax->setValue(yAxisMax);
 
 }
+
+void chartDialog::on_checkBoxReadValueError_stateChanged(int arg1)
+{
+    if(arg1)
+    {
+        if(checkStandardDeviationForFirstPoint())
+        {
+            for (int i = 0; i < 6; ++i)
+            {
+                QLineSeries *series = qobject_cast<QLineSeries*>(_chart->series().at(i));
+                qDebug() << "PRZED USUNIECIEM"  << series->points();
+                series->removePoints(0,2);
+                ui->chartView->repaint();
+                ui->chartView->update();
+                qDebug() << "PO USUNIECIEM" << series->points();
+                qDebug() << "------------------------";
+            }
+        }
+    }
+}
+
+
 

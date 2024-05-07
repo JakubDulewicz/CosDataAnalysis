@@ -37,7 +37,6 @@ private:
     QVector<QPointF> _series5;
     QVector<QPointF> _series6;
 
-    QChart *_chart;
     QVector<QLineSeries*> _lineSeries;
 
     void createChart();

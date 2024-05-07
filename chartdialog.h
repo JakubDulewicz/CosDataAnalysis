@@ -22,6 +22,10 @@ public:
     void setLineSeries(QVector<QLineSeries *> &newLineSeries);
 
     void setSeriesVisible(int seriesNumber, bool visible);
+    bool checkStandardDeviationForFirstPoint();
+
+    QVector<QLineSeries *> untouchedLineSeries() const;
+    void setUntouchedLineSeries(const QVector<QLineSeries *> &newUntouchedLineSeries);
 
 private slots:
     void on_checkBoxSeries1_stateChanged(int arg);
@@ -46,9 +50,12 @@ private slots:
 
     void on_pushButtonAutoAdjustment_clicked();
 
+    void on_checkBoxReadValueError_stateChanged(int arg1);
+
 private:
     Ui::chartDialog *ui;
     QVector<QLineSeries*> _lineSeries;
+    QVector<QLineSeries*> _untouchedLineSeries;
     QChart *_chart;
 
     double xAxisMin;

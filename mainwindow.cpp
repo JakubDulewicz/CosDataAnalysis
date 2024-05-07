@@ -12,10 +12,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     for (int i = 0; i < 6; ++i)
         _lineSeries.append(new QLineSeries());
-    _chart = new QChart();
 
     ui->tableData->setEditTriggers(QAbstractItemView::DoubleClicked | QAbstractItemView::EditKeyPressed);
-
 }
 
 MainWindow::~MainWindow()
@@ -38,6 +36,7 @@ void MainWindow::on_pushButton_2_clicked()
     createChart();
     chartDialog dialog;
     dialog.setLineSeries(_lineSeries);
+    dialog.setUntouchedLineSeries(_lineSeries);
     dialog.prepareChart();
     dialog.exec();
 }
