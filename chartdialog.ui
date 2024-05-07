@@ -23,7 +23,7 @@
    <item>
     <layout class="QVBoxLayout" name="verticalLayout">
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_3">
+      <layout class="QVBoxLayout" name="verticalLayoutData">
        <item>
         <widget class="QLabel" name="label">
          <property name="sizePolicy">
@@ -107,7 +107,7 @@
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayout_4">
+      <layout class="QVBoxLayout" name="verticalLayoutRange">
        <item>
         <widget class="QLabel" name="label_2">
          <property name="sizePolicy">
@@ -118,6 +118,9 @@
          </property>
          <property name="text">
           <string>Dostosuj zakres wartości</string>
+         </property>
+         <property name="alignment">
+          <set>Qt::AlignCenter</set>
          </property>
         </widget>
        </item>
@@ -231,15 +234,18 @@
         </layout>
        </item>
        <item>
-        <widget class="QPushButton" name="pushButton">
+        <widget class="QPushButton" name="pushButtonAutoAdjustment">
          <property name="sizePolicy">
           <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
            <horstretch>0</horstretch>
            <verstretch>0</verstretch>
           </sizepolicy>
          </property>
+         <property name="layoutDirection">
+          <enum>Qt::LeftToRight</enum>
+         </property>
          <property name="text">
-          <string>Atomatyczne dostosowanie zakres</string>
+          <string>Atomatyczne dostosowanie</string>
          </property>
         </widget>
        </item>

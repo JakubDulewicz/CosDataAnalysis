@@ -1,6 +1,7 @@
 #include "chartdialog.h"
 #include "ui_chartdialog.h"
 #include "QString"
+#include "stdio.h"
 
 chartDialog::chartDialog(QWidget *parent) :
     QDialog(parent),
@@ -10,6 +11,9 @@ chartDialog::chartDialog(QWidget *parent) :
     this->showMaximized();
 
     _chart = new QChart();
+    //ui->verticalLayoutRange->setAlignment(ui->pushButtonAutoAdjustment,Qt::AlignCenter);
+    //ui->pushButtonAutoAdjustment->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
+
 }
 
 chartDialog::~chartDialog()
@@ -45,8 +49,6 @@ void chartDialog::prepareChart()
     ui->doubleSpinBoxXAxisMax->setMaximum(xAxisMax);
     ui->doubleSpinBoxYAxisMin->setMinimum(yAxisMin);
     ui->doubleSpinBoxYAxisMax->setMaximum(yAxisMax);
-
-
 
     ui->chartView->setChart(_chart);
     ui->chartView->setRenderHint(QPainter::Antialiasing);
@@ -132,5 +134,43 @@ void chartDialog::on_doubleSpinBoxYAxisMax_valueChanged(double arg1)
 {
     yAxisMax = arg1;
     _chart->axisY()->setMax(yAxisMax);
+}
+
+
+void chartDialog::on_pushButtonAutoAdjustment_clicked()
+{
+    double minXValue = 0;
+    double maxXValue = 0;
+    double minYValue = 0;
+    double maxYValue = 0;
+    for (int i = 0; i < 6; ++i)
+    {
+        QLineSeries *series = qobject_cast<QLineSeries*>(_chart->series().at(i));
+        if(series && series->isVisible())
+        {
+            foreach (const QPointF &point, series->points())
+            {
+                if (point.x() < minXValue)
+                    minXValue = point.x();
+                if (point.y() < minYValue)
+                    minYValue = point.y();
+                if (point.x() > maxXValue)
+                    maxXValue = point.x();
+                if (point.y() > maxYValue)
+                    maxYValue = point.y();
+            }
+        }
+    }
+
+    xAxisMin = minXValue;
+    xAxisMax = maxXValue;
+    yAxisMin = minYValue;
+    yAxisMax = maxYValue;
+
+    ui->doubleSpinBoxXAxisMin->setValue(xAxisMin);
+    ui->doubleSpinBoxXAxisMax->setValue(xAxisMax);
+    ui->doubleSpinBoxYAxisMin->setValue(yAxisMin);
+    ui->doubleSpinBoxYAxisMax->setValue(yAxisMax);
+
 }
 

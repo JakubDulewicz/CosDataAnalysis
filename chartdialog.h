@@ -44,6 +44,8 @@ private slots:
 
     void on_doubleSpinBoxYAxisMax_valueChanged(double arg1);
 
+    void on_pushButtonAutoAdjustment_clicked();
+
 private:
     Ui::chartDialog *ui;
     QVector<QLineSeries*> _lineSeries;
