@@ -19,7 +19,7 @@ public:
     void prepareChart();
 
     QVector<QLineSeries *> lineSeries() const;
-    void setLineSeries(QVector<QLineSeries *> &newLineSeries);
+    void setLineSeries(const QVector<QLineSeries *> &newLineSeries);
 
     void setSeriesVisible(int seriesNumber, bool visible);
     bool checkStandardDeviationForFirstPoint();

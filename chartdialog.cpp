@@ -25,9 +25,12 @@ void chartDialog::prepareChart()
 {
     int i = 1;
     foreach(QLineSeries *series, _lineSeries) {
-        _chart->addSeries(series);
-        QString seriesName = "Seria " + QString::number(i);
-        series->setName(seriesName);
+        if(series)
+        {
+            _chart->addSeries(series);
+            QString seriesName = "Seria " + QString::number(i);
+            series->setName(seriesName);
+        }
         i++;
     }
     _chart->setTitle("Wykres");
@@ -63,9 +66,18 @@ QVector<QLineSeries *> chartDialog::lineSeries() const
     return _lineSeries;
 }
 
-void chartDialog::setLineSeries(QVector<QLineSeries *> &newLineSeries)
+void chartDialog::setLineSeries(const QVector<QLineSeries *> &newLineSeries)
 {
-    _lineSeries = newLineSeries;
+    qDeleteAll(_lineSeries);
+    _lineSeries.clear();
+
+    for (QLineSeries *series : newLineSeries) {
+            QLineSeries *newSeries = new QLineSeries();
+            for (int i = 0; i < series->count(); ++i) {
+                newSeries->append(series->at(i));
+            }
+            _lineSeries.append(newSeries);
+        }
 }
 
 QVector<QLineSeries *> chartDialog::untouchedLineSeries() const
@@ -74,8 +86,18 @@ QVector<QLineSeries *> chartDialog::untouchedLineSeries() const
 }
 
 void chartDialog::setUntouchedLineSeries(const QVector<QLineSeries *> &newUntouchedLineSeries)
-{
-    _untouchedLineSeries = newUntouchedLineSeries;
+{   
+    qDeleteAll(_untouchedLineSeries);
+    _untouchedLineSeries.clear();
+
+    for (QLineSeries *series : newUntouchedLineSeries) {
+            QLineSeries *newSeries = new QLineSeries();
+            for (int i = 0; i < series->count(); ++i) {
+                newSeries->append(series->at(i));
+            }
+            _untouchedLineSeries.append(newSeries);
+        }
+
 }
 
 void chartDialog::setSeriesVisible(int seriesNumber, bool visible)
@@ -194,13 +216,25 @@ void chartDialog::on_pushButtonAutoAdjustment_clicked()
     double maxXValue = 0;
     double minYValue = 0;
     double maxYValue = 0;
+    bool emptyValues = true;
     for (int i = 0; i < 6; ++i)
     {
         QLineSeries *series = qobject_cast<QLineSeries*>(_chart->series().at(i));
         if(series && series->isVisible())
         {
+
+
             foreach (const QPointF &point, series->points())
             {
+                if(emptyValues)
+                {
+                    minXValue = point.x();
+                    minYValue = point.y();
+                    maxXValue = point.x();
+                    minYValue = point.y();
+                    emptyValues = false;
+                }
+
                 if (point.x() < minXValue)
                     minXValue = point.x();
                 if (point.y() < minYValue)
@@ -223,6 +257,7 @@ void chartDialog::on_pushButtonAutoAdjustment_clicked()
     ui->doubleSpinBoxYAxisMin->setValue(yAxisMin);
     ui->doubleSpinBoxYAxisMax->setValue(yAxisMax);
 
+
 }
 
 void chartDialog::on_checkBoxReadValueError_stateChanged(int arg1)
@@ -242,6 +277,11 @@ void chartDialog::on_checkBoxReadValueError_stateChanged(int arg1)
                 qDebug() << "------------------------";
             }
         }
+    }
+    else
+    {
+        setLineSeries(untouchedLineSeries());
+        prepareChart();
     }
 }
 
