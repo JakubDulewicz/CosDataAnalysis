@@ -11,6 +11,8 @@ chartDialog::chartDialog(QWidget *parent) :
     this->showMaximized();
 
     _chart = new QChart();
+    setVisibleDimensionlessTime(false);
+
     //ui->verticalLayoutRange->setAlignment(ui->pushButtonAutoAdjustment,Qt::AlignCenter);
     //ui->pushButtonAutoAdjustment->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
 
@@ -159,6 +161,14 @@ void chartDialog::unifySeriesVisibility()
     setSeriesVisible(5,ui->checkBoxSeries6->isChecked());
 }
 
+void chartDialog::setVisibleDimensionlessTime(bool visible)
+{
+    ui->labelLiquidFlow->setVisible(visible);
+    ui->doubleSpinBoxLiquidFlow->setVisible(visible);
+    ui->labelTundishCapacity->setVisible(visible);
+    ui->doubleSpinBoxTundishCapacity->setVisible(visible);
+}
+
 
 void chartDialog::on_checkBoxSeries1_stateChanged(int arg1)
 {
@@ -299,4 +309,10 @@ void chartDialog::on_checkBoxReadValueError_stateChanged(int arg1)
 }
 
 
+
+
+void chartDialog::on_checkBoxDimensionlessTime_stateChanged(int arg1)
+{
+    setVisibleDimensionlessTime(arg1);
+}
 

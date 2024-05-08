@@ -20,6 +20,7 @@ public:
     void setSeriesVisible(int seriesNumber, bool visible);
     bool checkStandardDeviationForFirstPoint();
     void unifySeriesVisibility();
+    void setVisibleDimensionlessTime(bool visible);
 
 
     QVector<QLineSeries *> lineSeries() const;
@@ -52,6 +53,8 @@ private slots:
     void on_pushButtonAutoAdjustment_clicked();
 
     void on_checkBoxReadValueError_stateChanged(int arg1);
+
+    void on_checkBoxDimensionlessTime_stateChanged(int arg1);
 
 private:
     Ui::chartDialog *ui;
