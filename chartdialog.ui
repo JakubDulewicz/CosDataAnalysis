@@ -107,36 +107,6 @@
       </layout>
      </item>
      <item>
-      <layout class="QVBoxLayout" name="verticalLayoutDataAdjustments">
-       <item>
-        <widget class="QLabel" name="label_9">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Dostosuj dane</string>
-         </property>
-        </widget>
-       </item>
-       <item>
-        <widget class="QCheckBox" name="checkBoxReadValueError">
-         <property name="sizePolicy">
-          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
-           <horstretch>0</horstretch>
-           <verstretch>0</verstretch>
-          </sizepolicy>
-         </property>
-         <property name="text">
-          <string>Usuń początkowy bład odczytu</string>
-         </property>
-        </widget>
-       </item>
-      </layout>
-     </item>
-     <item>
       <layout class="QVBoxLayout" name="verticalLayoutRange">
        <item>
         <widget class="QLabel" name="label_2">
@@ -355,6 +325,12 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="decimals">
+              <number>2</number>
+             </property>
+             <property name="maximum">
+              <double>100000.000000000000000</double>
+             </property>
             </widget>
            </item>
            <item>
@@ -378,11 +354,47 @@
                <verstretch>0</verstretch>
               </sizepolicy>
              </property>
+             <property name="decimals">
+              <number>2</number>
+             </property>
+             <property name="maximum">
+              <double>100000.000000000000000</double>
+             </property>
             </widget>
            </item>
           </layout>
          </item>
         </layout>
+       </item>
+      </layout>
+     </item>
+     <item>
+      <layout class="QVBoxLayout" name="verticalLayoutDataAdjustments">
+       <item>
+        <widget class="QLabel" name="label_9">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Maximum">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Dostosuj dane</string>
+         </property>
+        </widget>
+       </item>
+       <item>
+        <widget class="QCheckBox" name="checkBoxReadValueError">
+         <property name="sizePolicy">
+          <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
+           <horstretch>0</horstretch>
+           <verstretch>0</verstretch>
+          </sizepolicy>
+         </property>
+         <property name="text">
+          <string>Usuń początkowy bład odczytu</string>
+         </property>
+        </widget>
        </item>
       </layout>
      </item>
