@@ -8,7 +8,6 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-    _fileManager.setParent(this);
 
     for (int i = 0; i < 6; ++i)
         _lineSeries.append(new QLineSeries());
