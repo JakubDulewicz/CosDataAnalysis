@@ -47,15 +47,19 @@ void chartDialog::prepareChart()
     yAxisMin = yAxis->min();
     yAxisMax = yAxis->max();
 
-    ui->doubleSpinBoxXAxisMin->setValue(xAxisMin);
-    ui->doubleSpinBoxXAxisMax->setValue(xAxisMax);
-    ui->doubleSpinBoxYAxisMin->setValue(yAxisMin);
-    ui->doubleSpinBoxYAxisMax->setValue(yAxisMax);
+    qDebug() << xAxisMin << xAxisMax << yAxisMin << yAxisMax;
 
     ui->doubleSpinBoxXAxisMin->setMinimum(xAxisMin);
     ui->doubleSpinBoxXAxisMax->setMaximum(xAxisMax);
     ui->doubleSpinBoxYAxisMin->setMinimum(yAxisMin);
     ui->doubleSpinBoxYAxisMax->setMaximum(yAxisMax);
+
+
+    ui->doubleSpinBoxXAxisMin->setValue(xAxisMin);
+    ui->doubleSpinBoxXAxisMax->setValue(xAxisMax);
+    ui->doubleSpinBoxYAxisMin->setValue(yAxisMin);
+    ui->doubleSpinBoxYAxisMax->setValue(yAxisMax);
+
 
     ui->chartView->setChart(_chart);
     ui->chartView->setRenderHint(QPainter::Antialiasing);
@@ -143,6 +147,16 @@ bool chartDialog::checkStandardDeviationForFirstPoint()
         }
     }
     return false;
+}
+
+void chartDialog::unifySeriesVisibility()
+{
+    setSeriesVisible(0,ui->checkBoxSeries1->isChecked());
+    setSeriesVisible(1,ui->checkBoxSeries2->isChecked());
+    setSeriesVisible(2,ui->checkBoxSeries3->isChecked());
+    setSeriesVisible(3,ui->checkBoxSeries4->isChecked());
+    setSeriesVisible(4,ui->checkBoxSeries5->isChecked());
+    setSeriesVisible(5,ui->checkBoxSeries6->isChecked());
 }
 
 
@@ -269,19 +283,18 @@ void chartDialog::on_checkBoxReadValueError_stateChanged(int arg1)
             for (int i = 0; i < 6; ++i)
             {
                 QLineSeries *series = qobject_cast<QLineSeries*>(_chart->series().at(i));
-                qDebug() << "PRZED USUNIECIEM"  << series->points();
                 series->removePoints(0,2);
                 ui->chartView->repaint();
                 ui->chartView->update();
-                qDebug() << "PO USUNIECIEM" << series->points();
-                qDebug() << "------------------------";
             }
+            on_pushButtonAutoAdjustment_clicked();
         }
     }
     else
     {
         setLineSeries(untouchedLineSeries());
         prepareChart();
+        unifySeriesVisibility();
     }
 }
 

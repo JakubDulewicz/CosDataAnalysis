@@ -17,12 +17,13 @@ public:
     ~chartDialog();
 
     void prepareChart();
+    void setSeriesVisible(int seriesNumber, bool visible);
+    bool checkStandardDeviationForFirstPoint();
+    void unifySeriesVisibility();
+
 
     QVector<QLineSeries *> lineSeries() const;
     void setLineSeries(const QVector<QLineSeries *> &newLineSeries);
-
-    void setSeriesVisible(int seriesNumber, bool visible);
-    bool checkStandardDeviationForFirstPoint();
 
     QVector<QLineSeries *> untouchedLineSeries() const;
     void setUntouchedLineSeries(const QVector<QLineSeries *> &newUntouchedLineSeries);
