@@ -84,40 +84,38 @@ void MainWindow::loadFileDataToTable()
 
     foreach (const QString &record, _fileManager.dataList())
     {
-       QStringList recordSplit = record.split(";");
-       currentColumn = 0;
+        QStringList recordSplit = record.split(";");
+        currentColumn = 0;
 
 
-       foreach (const QString &value, recordSplit)
-       {
-           QTableWidgetItem *item = new QTableWidgetItem(value);
-           //if((currentRow >= 2) && (currentColumn >= 2))
-           //{
-               qDebug() << currentColumn << "CURRENT COLUMN";
-               qDebug() << currentRow << "CURRENT ROW";
+        foreach (const QString &value, recordSplit)
+        {
+            QTableWidgetItem *item = new QTableWidgetItem(value);
 
-               QString adjustedValue = value;
-               adjustedValue = adjustedValue.replace(',','.');
-               double numericValue = adjustedValue.toDouble();
+            qDebug() << currentColumn << "CURRENT COLUMN";
+            qDebug() << currentRow << "CURRENT ROW";
 
-               //It look like a piece of shit and indead it's a shit
-               QPointF point(currentRow,numericValue);
-               switch (currentColumn) {
-               case 2: _series1.append(point); break;
-               case 3: _series2.append(point); break;
-               case 4: _series3.append(point); break;
-               case 5: _series4.append(point); break;
-               case 6: _series5.append(point); break;
-               case 7: _series6.append(point); break;
-               default:
-                   break;
-               }
+            QString adjustedValue = value;
+            adjustedValue = adjustedValue.replace(',','.');
+            double numericValue = adjustedValue.toDouble();
 
-           //}
-           ui->tableData->setItem(currentRow,currentColumn,item);
-           currentColumn++;
-       }
-       currentRow++;
+            //It look like a piece of shit and indead it's a shit
+            QPointF point(currentRow,numericValue);
+            switch (currentColumn) {
+            case 2: _series1.append(point); break;
+            case 3: _series2.append(point); break;
+            case 4: _series3.append(point); break;
+            case 5: _series4.append(point); break;
+            case 6: _series5.append(point); break;
+            case 7: _series6.append(point); break;
+            default:
+                break;
+            }
+
+            ui->tableData->setItem(currentRow,currentColumn,item);
+            currentColumn++;
+        }
+        currentRow++;
     }
 }
 

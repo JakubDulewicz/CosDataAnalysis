@@ -6,7 +6,7 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>686</width>
+    <width>905</width>
     <height>444</height>
    </rect>
   </property>
@@ -296,6 +296,13 @@
           </widget>
          </item>
          <item>
+          <widget class="QCheckBox" name="checkBox">
+           <property name="text">
+            <string>Przelicz natężenie wskaźnika</string>
+           </property>
+          </widget>
+         </item>
+         <item>
           <widget class="QCheckBox" name="checkBoxDimensionlessTime">
            <property name="sizePolicy">
             <sizepolicy hsizetype="Maximum" vsizetype="Fixed">
@@ -304,7 +311,7 @@
             </sizepolicy>
            </property>
            <property name="text">
-            <string>Przelicz czas na bezwymiarowy</string>
+            <string>Przelicz czas</string>
            </property>
           </widget>
          </item>

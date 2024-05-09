@@ -124,8 +124,9 @@ bool chartDialog::checkStandardDeviationForFirstPoint()
             {
                 QPointF potentialError = series->points().first();
                 double sum = 0;
+                double squerdiff = 0;
                 double mean;
-                double squerdiff;
+
 
                 for (int i = 1; i < 6; ++i)
                 {
@@ -286,8 +287,6 @@ void chartDialog::on_pushButtonAutoAdjustment_clicked()
         QLineSeries *series = qobject_cast<QLineSeries*>(_chart->series().at(i));
         if(series && series->isVisible())
         {
-
-
             foreach (const QPointF &point, series->points())
             {
                 if(emptyValues)
@@ -344,6 +343,7 @@ void chartDialog::on_checkBoxReadValueError_stateChanged(int arg1)
     {
         setLineSeries(untouchedLineSeries());
         prepareChart();
+        setVisibleEmptySeriesCheckBoxes();
         unifySeriesVisibility();
     }
 }
