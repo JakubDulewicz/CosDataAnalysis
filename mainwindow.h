@@ -39,7 +39,7 @@ private:
 
     QVector<QLineSeries*> _lineSeries;
 
-    void createChart();
+    void createLineSeries();
     void loadFileDataToTable();
     int calculateColumnNumber();
 };

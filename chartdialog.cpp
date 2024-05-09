@@ -169,6 +169,46 @@ void chartDialog::setVisibleDimensionlessTime(bool visible)
     ui->doubleSpinBoxTundishCapacity->setVisible(visible);
 }
 
+void chartDialog::setVisibleEmptySeriesCheckBoxes()
+{
+    if(_lineSeries.at(0)->count() == 0)
+    {
+        _chart->legend()->markers(_lineSeries.at(0))[0]->setVisible(false);
+        ui->checkBoxSeries1->setChecked(false);
+        ui->checkBoxSeries1->setVisible(false);
+    }
+    if(_lineSeries.at(1)->count() == 0)
+    {
+        _chart->legend()->markers(_lineSeries.at(1))[0]->setVisible(false);
+        ui->checkBoxSeries2->setChecked(false);
+        ui->checkBoxSeries2->setVisible(false);
+    }
+    if(_lineSeries.at(2)->count() == 0)
+    {
+        _chart->legend()->markers(_lineSeries.at(2))[0]->setVisible(false);
+        ui->checkBoxSeries3->setChecked(false);
+        ui->checkBoxSeries3->setVisible(false);
+    }
+    if(_lineSeries.at(3)->count() == 0)
+    {
+        _chart->legend()->markers(_lineSeries.at(3))[0]->setVisible(false);
+        ui->checkBoxSeries4->setChecked(false);
+        ui->checkBoxSeries4->setVisible(false);
+    }
+    if(_lineSeries.at(4)->count() == 0)
+    {
+        _chart->legend()->markers(_lineSeries.at(4))[0]->setVisible(false);
+        ui->checkBoxSeries5->setEnabled(false);
+        ui->checkBoxSeries5->setVisible(false);
+    }
+    if(_lineSeries.at(5)->count() == 0)
+    {
+        _chart->legend()->markers(_lineSeries.at(5))[0]->setVisible(false);
+        ui->checkBoxSeries6->setEnabled(false);
+        ui->checkBoxSeries6->setVisible(false);
+    }
+}
+
 
 void chartDialog::on_checkBoxSeries1_stateChanged(int arg1)
 {

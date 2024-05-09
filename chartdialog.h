@@ -21,6 +21,7 @@ public:
     bool checkStandardDeviationForFirstPoint();
     void unifySeriesVisibility();
     void setVisibleDimensionlessTime(bool visible);
+    void setVisibleEmptySeriesCheckBoxes();
 
 
     QVector<QLineSeries *> lineSeries() const;

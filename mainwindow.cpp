@@ -8,6 +8,7 @@ MainWindow::MainWindow(QWidget *parent)
     , ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
+    ui->pushButton_2->setEnabled(false);
 
     for (int i = 0; i < 6; ++i)
         _lineSeries.append(new QLineSeries());
@@ -25,26 +26,26 @@ void MainWindow::on_pushButton_clicked()
 {
    QString path = _fileManager.loadDataFromFile();
    ui->filePath->setText(path);
-
    loadFileDataToTable();
-
+   if(!ui->filePath->text().isEmpty())
+       ui->pushButton_2->setEnabled(true);
 }
 
 void MainWindow::on_pushButton_2_clicked()
 {
-    createChart();
+    createLineSeries();
     chartDialog dialog;
+    dialog.setWindowFlags(Qt::Window);
     dialog.setLineSeries(_lineSeries);
     dialog.setUntouchedLineSeries(_lineSeries);
     dialog.prepareChart();
-    dialog.setWindowFlags(Qt::Window);
+    dialog.setVisibleEmptySeriesCheckBoxes();
     dialog.exec();
 }
 
 
-void MainWindow::createChart()
+void MainWindow::createLineSeries()
 {
-    //MY EYE OUTCH
     foreach(const QPointF &point, _series1) {
         qDebug() << point;
         _lineSeries.at(0)->append(point);
@@ -71,7 +72,6 @@ void MainWindow::createChart()
     }
 
 }
-
 void MainWindow::loadFileDataToTable()
 {
     ui->tableData->setRowCount(_fileManager.dataList().size());
@@ -119,8 +119,6 @@ void MainWindow::loadFileDataToTable()
        }
        currentRow++;
     }
-    qDebug() << _series1;
-
 }
 
 
