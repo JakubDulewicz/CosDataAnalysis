@@ -37,6 +37,7 @@ void MainWindow::on_pushButton_2_clicked()
     dialog.setLineSeries(_lineSeries);
     dialog.setUntouchedLineSeries(_lineSeries);
     dialog.prepareChart();
+    dialog.setWindowFlags(Qt::Window);
     dialog.exec();
 }
 
