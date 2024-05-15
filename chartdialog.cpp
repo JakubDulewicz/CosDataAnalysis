@@ -12,7 +12,6 @@ chartDialog::chartDialog(QWidget *parent) :
 
     _chart = new QChart();
     setVisibleDimensionlessTime(false);
-
     //ui->verticalLayoutRange->setAlignment(ui->pushButtonAutoAdjustment,Qt::AlignCenter);
     //ui->pushButtonAutoAdjustment->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
 
@@ -41,7 +40,7 @@ void chartDialog::prepareChart()
     QValueAxis *xAxis = qobject_cast<QValueAxis *>(_chart->axes(Qt::Horizontal).at(0));
     QValueAxis *yAxis = qobject_cast<QValueAxis *>(_chart->axes(Qt::Vertical).at(0));
 
-    xAxis->setTitleText("Numer pomiaru");
+    xAxis->setTitleText("Czas pomiaru, s");
     yAxis->setTitleText("Stężenie wskaźnika, μS");
 
     xAxisMin = xAxis->min();
@@ -67,6 +66,26 @@ void chartDialog::prepareChart()
     ui->chartView->setRenderHint(QPainter::Antialiasing);
 }
 
+void chartDialog::convertToTimeStep()
+{
+    foreach (QLineSeries *series, _lineSeries)
+    {
+        double startTime = series->at(1).x();
+        for (int i = 0; i < series->count(); ++i)
+        {
+            if(i > 1)
+            {
+                double xValue = series->at(i).x();
+                qDebug() << xValue-startTime;
+                series->replace(i,xValue-startTime,series->at(i).y());
+            }
+        }
+        series->replace(0,-3,series->at(0).y());
+        series->replace(1,-3,series->at(1).y());
+
+    }
+}
+
 QVector<QLineSeries *> chartDialog::lineSeries() const
 {
     return _lineSeries;
@@ -77,13 +96,15 @@ void chartDialog::setLineSeries(const QVector<QLineSeries *> &newLineSeries)
     qDeleteAll(_lineSeries);
     _lineSeries.clear();
 
-    for (QLineSeries *series : newLineSeries) {
+    for (QLineSeries *series : newLineSeries)
+    {
             QLineSeries *newSeries = new QLineSeries();
-            for (int i = 0; i < series->count(); ++i) {
+            for (int i = 0; i < series->count(); ++i)
+            {
                 newSeries->append(series->at(i));
             }
             _lineSeries.append(newSeries);
-        }
+    }
 }
 
 QVector<QLineSeries *> chartDialog::untouchedLineSeries() const
@@ -342,6 +363,7 @@ void chartDialog::on_checkBoxReadValueError_stateChanged(int arg1)
     else
     {
         setLineSeries(untouchedLineSeries());
+        convertToTimeStep();
         prepareChart();
         setVisibleEmptySeriesCheckBoxes();
         unifySeriesVisibility();

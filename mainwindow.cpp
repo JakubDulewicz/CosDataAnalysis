@@ -38,6 +38,7 @@ void MainWindow::on_pushButton_2_clicked()
     dialog.setWindowFlags(Qt::Window);
     dialog.setLineSeries(_lineSeries);
     dialog.setUntouchedLineSeries(_lineSeries);
+    dialog.convertToTimeStep();
     dialog.prepareChart();
     dialog.setVisibleEmptySeriesCheckBoxes();
     dialog.exec();
@@ -98,20 +99,22 @@ void MainWindow::loadFileDataToTable()
             QString adjustedValue = value;
             adjustedValue = adjustedValue.replace(',','.');
             double numericValue = adjustedValue.toDouble();
-
-            //It look like a piece of shit and indead it's a shit
-            QPointF point(currentRow,numericValue);
-            switch (currentColumn) {
-            case 2: _series1.append(point); break;
-            case 3: _series2.append(point); break;
-            case 4: _series3.append(point); break;
-            case 5: _series4.append(point); break;
-            case 6: _series5.append(point); break;
-            case 7: _series6.append(point); break;
-            default:
-                break;
+            qDebug() << recordSplit.at(1);
+            QDateTime dateTime = QDateTime::fromString(recordSplit.at(1), "yyyy-MM-dd hh:mm:ss,z");
+            if(dateTime.isValid())
+            {
+                QPointF point(dateTime.toSecsSinceEpoch(),numericValue);
+                switch (currentColumn) {
+                case 2: _series1.append(point); break;
+                case 3: _series2.append(point); break;
+                case 4: _series3.append(point); break;
+                case 5: _series4.append(point); break;
+                case 6: _series5.append(point); break;
+                case 7: _series6.append(point); break;
+                default:
+                    break;
+                }
             }
-
             ui->tableData->setItem(currentRow,currentColumn,item);
             currentColumn++;
         }

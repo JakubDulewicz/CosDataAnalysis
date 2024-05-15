@@ -17,6 +17,7 @@ public:
     ~chartDialog();
 
     void prepareChart();
+    void convertToTimeStep();
     void setSeriesVisible(int seriesNumber, bool visible);
     bool checkStandardDeviationForFirstPoint();
     void unifySeriesVisibility();
