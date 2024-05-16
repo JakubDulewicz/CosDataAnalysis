@@ -81,9 +81,68 @@ void chartDialog::convertToTimeStep()
             }
         }
         series->replace(0,-3,series->at(0).y());
-        series->replace(1,-3,series->at(1).y());
-
+        series->replace(1,0,series->at(1).y());
     }
+}
+
+void chartDialog::convertToDimensionlessTracerConcentration()
+{
+    foreach (QLineSeries *series, _lineSeries)
+    {
+        double startTracerConcentrationValue = series->at(1).y();
+        double endTracerConcentrationValue = series->at(series->count() - 1).y();
+        for (int i = 0; i < series->count(); ++i) {
+            double currentYValue = series->at(i).y();
+            double dimensionlessTracerValue = (currentYValue - startTracerConcentrationValue)/(endTracerConcentrationValue - startTracerConcentrationValue);
+            series->replace(i,series->at(i).x(),dimensionlessTracerValue);
+        }
+    }
+}
+
+void chartDialog::adjustChartScale()
+{
+    double minXValue = 0;
+    double maxXValue = 0;
+    double minYValue = 0;
+    double maxYValue = 0;
+    bool emptyValues = true;
+    for (int i = 0; i < 6; ++i)
+    {
+        QLineSeries *series = qobject_cast<QLineSeries*>(_chart->series().at(i));
+        if(series && series->isVisible())
+        {
+            foreach (const QPointF &point, series->points())
+            {
+                if(emptyValues)
+                {
+                    minXValue = point.x();
+                    minYValue = point.y();
+                    maxXValue = point.x();
+                    minYValue = point.y();
+                    emptyValues = false;
+                }
+
+                if (point.x() < minXValue)
+                    minXValue = point.x();
+                if (point.y() < minYValue)
+                    minYValue = point.y();
+                if (point.x() > maxXValue)
+                    maxXValue = point.x();
+                if (point.y() > maxYValue)
+                    maxYValue = point.y();
+            }
+        }
+    }
+
+    xAxisMin = minXValue;
+    xAxisMax = maxXValue;
+    yAxisMin = minYValue;
+    yAxisMax = maxYValue;
+
+    ui->doubleSpinBoxXAxisMin->setValue(xAxisMin);
+    ui->doubleSpinBoxXAxisMax->setValue(xAxisMax);
+    ui->doubleSpinBoxYAxisMin->setValue(yAxisMin);
+    ui->doubleSpinBoxYAxisMax->setValue(yAxisMax);
 }
 
 QVector<QLineSeries *> chartDialog::lineSeries() const
@@ -298,50 +357,7 @@ void chartDialog::on_doubleSpinBoxYAxisMax_valueChanged(double arg1)
 
 void chartDialog::on_pushButtonAutoAdjustment_clicked()
 {
-    double minXValue = 0;
-    double maxXValue = 0;
-    double minYValue = 0;
-    double maxYValue = 0;
-    bool emptyValues = true;
-    for (int i = 0; i < 6; ++i)
-    {
-        QLineSeries *series = qobject_cast<QLineSeries*>(_chart->series().at(i));
-        if(series && series->isVisible())
-        {
-            foreach (const QPointF &point, series->points())
-            {
-                if(emptyValues)
-                {
-                    minXValue = point.x();
-                    minYValue = point.y();
-                    maxXValue = point.x();
-                    minYValue = point.y();
-                    emptyValues = false;
-                }
-
-                if (point.x() < minXValue)
-                    minXValue = point.x();
-                if (point.y() < minYValue)
-                    minYValue = point.y();
-                if (point.x() > maxXValue)
-                    maxXValue = point.x();
-                if (point.y() > maxYValue)
-                    maxYValue = point.y();
-            }
-        }
-    }
-
-    xAxisMin = minXValue;
-    xAxisMax = maxXValue;
-    yAxisMin = minYValue;
-    yAxisMax = maxYValue;
-
-    ui->doubleSpinBoxXAxisMin->setValue(xAxisMin);
-    ui->doubleSpinBoxXAxisMax->setValue(xAxisMax);
-    ui->doubleSpinBoxYAxisMin->setValue(yAxisMin);
-    ui->doubleSpinBoxYAxisMax->setValue(yAxisMax);
-
-
+    adjustChartScale();
 }
 
 void chartDialog::on_checkBoxReadValueError_stateChanged(int arg1)
@@ -376,5 +392,18 @@ void chartDialog::on_checkBoxReadValueError_stateChanged(int arg1)
 void chartDialog::on_checkBoxDimensionlessTime_stateChanged(int arg1)
 {
     setVisibleDimensionlessTime(arg1);
+}
+
+
+void chartDialog::on_checkBoxDimensionlessTracerConcentration_stateChanged(int arg1)
+{
+    if(arg1)
+    {
+
+        convertToDimensionlessTracerConcentration();
+        adjustChartScale();
+        QValueAxis *yAxis = qobject_cast<QValueAxis *>(_chart->axes(Qt::Vertical).at(0));
+        yAxis->setTitleText("Bezwymiarowe stężenie wskaźnika, - ");
+    }
 }
 

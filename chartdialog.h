@@ -18,9 +18,11 @@ public:
 
     void prepareChart();
     void convertToTimeStep();
-    void setSeriesVisible(int seriesNumber, bool visible);
+    void convertToDimensionlessTracerConcentration();
+    void adjustChartScale();
     bool checkStandardDeviationForFirstPoint();
     void unifySeriesVisibility();
+    void setSeriesVisible(int seriesNumber, bool visible);
     void setVisibleDimensionlessTime(bool visible);
     void setVisibleEmptySeriesCheckBoxes();
 
@@ -57,6 +59,8 @@ private slots:
     void on_checkBoxReadValueError_stateChanged(int arg1);
 
     void on_checkBoxDimensionlessTime_stateChanged(int arg1);
+
+    void on_checkBoxDimensionlessTracerConcentration_stateChanged(int arg1);
 
 private:
     Ui::chartDialog *ui;
