@@ -22,6 +22,7 @@ public:
     void adjustChartScale();
     bool checkStandardDeviationForFirstPoint();
     void unifySeriesVisibility();
+    void removeInvalidFirstPoints();
     void setSeriesVisible(int seriesNumber, bool visible);
     void setVisibleDimensionlessTime(bool visible);
     void setVisibleEmptySeriesCheckBoxes();

@@ -242,6 +242,21 @@ void chartDialog::unifySeriesVisibility()
     setSeriesVisible(5,ui->checkBoxSeries6->isChecked());
 }
 
+void chartDialog::removeInvalidFirstPoints()
+{
+    if(checkStandardDeviationForFirstPoint())
+    {
+        for (int i = 0; i < 6; ++i)
+        {
+            QLineSeries *series = qobject_cast<QLineSeries*>(_chart->series().at(i));
+            series->removePoints(0,2);
+            ui->chartView->repaint();
+            ui->chartView->update();
+        }
+        on_pushButtonAutoAdjustment_clicked();
+    }
+}
+
 void chartDialog::setVisibleDimensionlessTime(bool visible)
 {
     ui->labelLiquidFlow->setVisible(visible);
@@ -364,17 +379,7 @@ void chartDialog::on_checkBoxReadValueError_stateChanged(int arg1)
 {
     if(arg1)
     {
-        if(checkStandardDeviationForFirstPoint())
-        {
-            for (int i = 0; i < 6; ++i)
-            {
-                QLineSeries *series = qobject_cast<QLineSeries*>(_chart->series().at(i));
-                series->removePoints(0,2);
-                ui->chartView->repaint();
-                ui->chartView->update();
-            }
-            on_pushButtonAutoAdjustment_clicked();
-        }
+        removeInvalidFirstPoints();
     }
     else
     {
@@ -383,6 +388,14 @@ void chartDialog::on_checkBoxReadValueError_stateChanged(int arg1)
         prepareChart();
         setVisibleEmptySeriesCheckBoxes();
         unifySeriesVisibility();
+        if(ui->checkBoxDimensionlessTracerConcentration->isChecked())
+        {
+            convertToDimensionlessTracerConcentration();
+            adjustChartScale();
+            QValueAxis *yAxis = qobject_cast<QValueAxis *>(_chart->axes(Qt::Vertical).at(0));
+            yAxis->setTitleText("Bezwymiarowe stężenie wskaźnika, - ");
+        }
+        adjustChartScale();
     }
 }
 
@@ -399,11 +412,21 @@ void chartDialog::on_checkBoxDimensionlessTracerConcentration_stateChanged(int a
 {
     if(arg1)
     {
-
         convertToDimensionlessTracerConcentration();
         adjustChartScale();
         QValueAxis *yAxis = qobject_cast<QValueAxis *>(_chart->axes(Qt::Vertical).at(0));
         yAxis->setTitleText("Bezwymiarowe stężenie wskaźnika, - ");
+    }
+    else
+    {
+        setLineSeries(untouchedLineSeries());
+        convertToTimeStep();
+        prepareChart();
+        setVisibleEmptySeriesCheckBoxes();
+        unifySeriesVisibility();
+        if(ui->checkBoxReadValueError->isChecked())
+            removeInvalidFirstPoints();
+        adjustChartScale();
     }
 }
 
