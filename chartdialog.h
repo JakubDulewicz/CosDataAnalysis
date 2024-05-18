@@ -19,6 +19,7 @@ public:
     void prepareChart();
     void convertToTimeStep();
     void convertToDimensionlessTracerConcentration();
+    void convertToDimensionlessTime();
     void adjustChartScale();
     bool checkStandardDeviationForFirstPoint();
     void unifySeriesVisibility();
@@ -66,6 +67,8 @@ private slots:
     void on_checkBoxDimensionlessTracerConcentration_stateChanged(int arg1);
 
     void on_pushButtonSaveChart_clicked();
+
+    void on_pushButtonCalculateTime_clicked();
 
 private:
     Ui::chartDialog *ui;

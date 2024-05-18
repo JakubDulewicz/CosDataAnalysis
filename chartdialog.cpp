@@ -40,7 +40,7 @@ void chartDialog::prepareChart()
     QValueAxis *yAxis = qobject_cast<QValueAxis *>(_chart->axes(Qt::Vertical).at(0));
 
     xAxis->setTitleText("Czas pomiaru, s");
-    yAxis->setTitleText("Stężenie wskaźnika, μS");
+    yAxis->setTitleText("Przewodność elektryczna, μS");
 
     xAxisMin = xAxis->min();
     xAxisMax = xAxis->max();
@@ -96,6 +96,49 @@ void chartDialog::convertToDimensionlessTracerConcentration()
             series->replace(i,series->at(i).x(),dimensionlessTracerValue);
         }
     }
+}
+
+void chartDialog::convertToDimensionlessTime()
+{
+    double tundishCapacity = ui->doubleSpinBoxTundishCapacity->value();
+    double liquidFlow = ui->doubleSpinBoxLiquidFlow->value();
+    double theoreticalTime = tundishCapacity/liquidFlow;
+
+    foreach (QLineSeries *series, _lineSeries)
+    {
+        for (int i = 0; i < series->count(); ++i)
+        {
+            qDebug() << "Point Before: " << series->at(i);
+            double currentXValue = series->at(i).x();
+            double dimensionlessTime = (currentXValue/theoreticalTime);
+            series->replace(i,dimensionlessTime,series->at(i).y());
+            qDebug() << "Point After: " << series->at(i);
+            _chart->update();
+        }
+    }
+
+    QValueAxis *axisX = qobject_cast<QValueAxis*>(_chart->axisX());
+        if (axisX)
+        {
+            double minX = _lineSeries.at(0)->at(0).x();
+            double maxX = _lineSeries.at(0)->at(0).x();
+
+            foreach (QLineSeries *series, _lineSeries)
+            {
+                for (int i = 0; i < series->count(); ++i)
+                {
+                    double xValue = series->at(i).x();
+                    if (xValue < minX) minX = xValue;
+                    if (xValue > maxX) maxX = xValue;
+                }
+            }
+
+            axisX->setRange(minX, maxX);
+        }
+
+        // Odświeżenie wykresu
+        _chart->update();
+
 }
 
 void chartDialog::adjustChartScale()
@@ -489,6 +532,13 @@ void chartDialog::on_pushButtonSaveChart_clicked()
     if(!filePath.isEmpty())
         ui->chartView->grab().save(filePath);
 }
+
+void chartDialog::on_pushButtonCalculateTime_clicked()
+{
+    convertToDimensionlessTime();
+}
+
+
 
 
 
