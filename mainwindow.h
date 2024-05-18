@@ -17,6 +17,10 @@ class MainWindow : public QMainWindow
 public:
     MainWindow(QWidget *parent = nullptr);
     ~MainWindow();
+    void clearData();
+    void createLineSeries();
+    void loadFileDataToTable();
+    int calculateColumnNumber();
 
 private slots:
     void on_pushButton_clicked();
@@ -38,9 +42,5 @@ private:
     QVector<QPointF> _series6;
 
     QVector<QLineSeries*> _lineSeries;
-
-    void createLineSeries();
-    void loadFileDataToTable();
-    int calculateColumnNumber();
 };
 #endif // MAINWINDOW_H

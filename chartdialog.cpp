@@ -18,6 +18,14 @@ chartDialog::chartDialog(QWidget *parent) :
 
 chartDialog::~chartDialog()
 {
+    for (QLineSeries* series : _lineSeries)
+        delete series;
+    for (QLineSeries* series : _untouchedLineSeries)
+        delete series;
+    _untouchedLineSeries.clear();
+    _lineSeries.clear();
+    ui->chartView->deleteLater();
+    delete _chart;
     delete ui;
 }
 
@@ -69,18 +77,21 @@ void chartDialog::convertToTimeStep()
 {
     foreach (QLineSeries *series, _lineSeries)
     {
-        double startTime = series->at(1).x();
-        for (int i = 0; i < series->count(); ++i)
+        if(series && (series->count() != 0))
         {
-            if(i > 1)
+            double startTime = series->at(1).x();
+            for (int i = 0; i < series->count(); ++i)
             {
-                double xValue = series->at(i).x();
-                qDebug() << xValue-startTime;
-                series->replace(i,xValue-startTime,series->at(i).y());
+                if(i > 1)
+                {
+                    double xValue = series->at(i).x();
+                    qDebug() << xValue-startTime;
+                    series->replace(i,xValue-startTime,series->at(i).y());
+                }
             }
+            series->replace(0,-3,series->at(0).y());
+            series->replace(1,0,series->at(1).y());
         }
-        series->replace(0,-3,series->at(0).y());
-        series->replace(1,0,series->at(1).y());
     }
 }
 
@@ -88,12 +99,16 @@ void chartDialog::convertToDimensionlessTracerConcentration()
 {
     foreach (QLineSeries *series, _lineSeries)
     {
-        double startTracerConcentrationValue = series->at(1).y();
-        double endTracerConcentrationValue = series->at(series->count() - 1).y();
-        for (int i = 0; i < series->count(); ++i) {
-            double currentYValue = series->at(i).y();
-            double dimensionlessTracerValue = (currentYValue - startTracerConcentrationValue)/(endTracerConcentrationValue - startTracerConcentrationValue);
-            series->replace(i,series->at(i).x(),dimensionlessTracerValue);
+        if(series && (series->count() != 0))
+        {
+            double startTracerConcentrationValue = series->at(1).y();
+            double endTracerConcentrationValue = series->at(series->count() - 1).y();
+            for (int i = 0; i < series->count(); ++i)
+            {
+                double currentYValue = series->at(i).y();
+                double dimensionlessTracerValue = (currentYValue - startTracerConcentrationValue)/(endTracerConcentrationValue - startTracerConcentrationValue);
+                series->replace(i,series->at(i).x(),dimensionlessTracerValue);
+            }
         }
     }
 }
@@ -106,39 +121,19 @@ void chartDialog::convertToDimensionlessTime()
 
     foreach (QLineSeries *series, _lineSeries)
     {
-        for (int i = 0; i < series->count(); ++i)
+        if(series && (series->count() != 0))
         {
-            qDebug() << "Point Before: " << series->at(i);
-            double currentXValue = series->at(i).x();
-            double dimensionlessTime = (currentXValue/theoreticalTime);
-            series->replace(i,dimensionlessTime,series->at(i).y());
-            qDebug() << "Point After: " << series->at(i);
-            _chart->update();
+            for (int i = 0; i < series->count(); ++i)
+            {
+                qDebug() << "Point Before: " << series->at(i);
+                double currentXValue = series->at(i).x();
+                double dimensionlessTime = (currentXValue/theoreticalTime);
+                series->replace(i,dimensionlessTime,series->at(i).y());
+                qDebug() << "Point After: " << series->at(i);
+                _chart->update();
+            }
         }
     }
-
-    // QValueAxis *axisX = qobject_cast<QValueAxis*>(_chart->axisX());
-    //     if (axisX)
-    //     {
-    //         double minX = _lineSeries.at(0)->at(0).x();
-    //         double maxX = _lineSeries.at(0)->at(0).x();
-
-    //         foreach (QLineSeries *series, _lineSeries)
-    //         {
-    //             for (int i = 0; i < series->count(); ++i)
-    //             {
-    //                 double xValue = series->at(i).x();
-    //                 if (xValue < minX) minX = xValue;
-    //                 if (xValue > maxX) maxX = xValue;
-    //             }
-    //         }
-
-    //         axisX->setRange(minX, maxX);
-    //     }
-
-    //     // Odświeżenie wykresu
-    //     _chart->update();
-
 }
 
 void chartDialog::adjustChartScale()
@@ -385,6 +380,7 @@ void chartDialog::setVisibleDimensionlessTime(bool visible)
     ui->doubleSpinBoxLiquidFlow->setVisible(visible);
     ui->labelTundishCapacity->setVisible(visible);
     ui->doubleSpinBoxTundishCapacity->setVisible(visible);
+    ui->pushButtonCalculateTime->setVisible(visible);
 }
 
 void chartDialog::setVisibleEmptySeriesCheckBoxes()

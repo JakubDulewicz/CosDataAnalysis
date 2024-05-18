@@ -9,6 +9,8 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     ui->pushButton_2->setEnabled(false);
+    setWindowTitle("Aplikacja do analizy danych procesu COS");
+
 
     for (int i = 0; i < 6; ++i)
         _lineSeries.append(new QLineSeries());
@@ -21,14 +23,39 @@ MainWindow::~MainWindow()
     delete ui;
 }
 
+void MainWindow::clearData()
+{
+    for (int row = 0; row < _tableRowNumber; ++row)
+    {
+        for (int col = 0; col < _tableColumnNumber; ++col)
+        {
+            QTableWidgetItem* item = ui->tableData->takeItem(row, col);
+            delete item;
+        }
+    }
+    ui->tableData->setRowCount(0);
+    ui->tableData->setColumnCount(0);
+
+    _series1.clear();
+    _series2.clear();
+    _series3.clear();
+    _series4.clear();
+    _series5.clear();
+    _series6.clear();
+    _lineSeries.clear();
+}
+
 
 void MainWindow::on_pushButton_clicked()
 {
-   QString path = _fileManager.loadDataFromFile();
-   ui->filePath->setText(path);
-   loadFileDataToTable();
-   if(!ui->filePath->text().isEmpty())
-       ui->pushButton_2->setEnabled(true);
+    if(!ui->filePath->text().isEmpty())
+        clearData();
+
+    QString path = _fileManager.loadDataFromFile();
+    ui->filePath->setText(path);
+    loadFileDataToTable();
+    if(!ui->filePath->text().isEmpty())
+        ui->pushButton_2->setEnabled(true);
 }
 
 void MainWindow::on_pushButton_2_clicked()
