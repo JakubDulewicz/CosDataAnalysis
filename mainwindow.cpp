@@ -41,6 +41,8 @@ void MainWindow::on_pushButton_2_clicked()
     dialog.convertToTimeStep();
     dialog.prepareChart();
     dialog.setVisibleEmptySeriesCheckBoxes();
+    dialog.setVisibleInvalidSeries();
+    dialog.adjustChartScale();
     dialog.exec();
 }
 

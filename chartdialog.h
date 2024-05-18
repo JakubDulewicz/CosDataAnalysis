@@ -23,10 +23,12 @@ public:
     bool checkStandardDeviationForFirstPoint();
     void unifySeriesVisibility();
     void removeInvalidFirstPoints();
+    double calculateStandardDeviation(QLineSeries *series);
+
     void setSeriesVisible(int seriesNumber, bool visible);
     void setVisibleDimensionlessTime(bool visible);
     void setVisibleEmptySeriesCheckBoxes();
-
+    void setVisibleInvalidSeries();
 
     QVector<QLineSeries *> lineSeries() const;
     void setLineSeries(const QVector<QLineSeries *> &newLineSeries);

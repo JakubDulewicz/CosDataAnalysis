@@ -256,6 +256,33 @@ void chartDialog::removeInvalidFirstPoints()
     }
 }
 
+double chartDialog::calculateStandardDeviation(QLineSeries *series)
+{
+    if(!series || series->count() == 0)
+        return -1;
+
+    int pointsAmount = series->count();
+    QVector<QPointF> points = series->pointsVector();
+    double sum = 0;
+    double mean;
+    double sumOfSquares;
+
+    for ( const QPointF &point : points)
+        sum += point.y();
+    mean = sum/pointsAmount;
+
+    for (const QPointF &point : points)
+    {
+        double diff = point.y() - mean;
+        sumOfSquares += diff * diff;
+    }
+
+    double variance = sumOfSquares / pointsAmount;
+    double standardDeviation = std::sqrt(variance);
+
+    return standardDeviation;
+}
+
 void chartDialog::setVisibleDimensionlessTime(bool visible)
 {
     ui->labelLiquidFlow->setVisible(visible);
@@ -301,6 +328,35 @@ void chartDialog::setVisibleEmptySeriesCheckBoxes()
         _chart->legend()->markers(_lineSeries.at(5))[0]->setVisible(false);
         ui->checkBoxSeries6->setEnabled(false);
         ui->checkBoxSeries6->setVisible(false);
+    }
+}
+
+void chartDialog::setVisibleInvalidSeries()
+{
+    for (int i = 0; i < 6; ++i)
+    {
+        qDebug() << "Value i" << i;
+        QLineSeries *series = qobject_cast<QLineSeries*>(_chart->series().at(i));
+        if(series)
+        {
+            double standardDeviation = calculateStandardDeviation(series);
+            // Value 5 is arbitrarily assumed value based on obesrvation of invalidly working sensors
+            if(standardDeviation < 5)
+            {
+                qDebug() << "Works for: " << i;
+                switch (i) {
+                case 0: ui->checkBoxSeries1->setChecked(false); break;
+                case 1: ui->checkBoxSeries2->setChecked(false); break;
+                case 2: ui->checkBoxSeries3->setChecked(false); break;
+                case 3: ui->checkBoxSeries4->setChecked(false); break;
+                case 4: ui->checkBoxSeries5->setChecked(false); break;
+                case 5: ui->checkBoxSeries6->setChecked(false); break;
+                default:
+                    break;
+                }
+            }
+        }
+
     }
 }
 
