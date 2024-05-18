@@ -9,7 +9,6 @@ chartDialog::chartDialog(QWidget *parent) :
 {
     ui->setupUi(this);
     this->showMaximized();
-
     _chart = new QChart();
     setVisibleDimensionlessTime(false);
     //ui->verticalLayoutRange->setAlignment(ui->pushButtonAutoAdjustment,Qt::AlignCenter);
@@ -399,9 +398,6 @@ void chartDialog::on_checkBoxReadValueError_stateChanged(int arg1)
     }
 }
 
-
-
-
 void chartDialog::on_checkBoxDimensionlessTime_stateChanged(int arg1)
 {
     setVisibleDimensionlessTime(arg1);
@@ -429,4 +425,37 @@ void chartDialog::on_checkBoxDimensionlessTracerConcentration_stateChanged(int a
         adjustChartScale();
     }
 }
+
+
+void chartDialog::on_pushButtonSaveChart_clicked()
+{
+    QString filePath = QFileDialog::getSaveFileName(nullptr,"Zapisz wykres","","PNG Files (*.png);;JPEG Files (*.jpg)");
+    if(!filePath.isEmpty())
+        ui->chartView->grab().save(filePath);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 

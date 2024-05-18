@@ -63,6 +63,8 @@ private slots:
 
     void on_checkBoxDimensionlessTracerConcentration_stateChanged(int arg1);
 
+    void on_pushButtonSaveChart_clicked();
+
 private:
     Ui::chartDialog *ui;
     QVector<QLineSeries*> _lineSeries;
