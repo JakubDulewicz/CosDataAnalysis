@@ -145,7 +145,7 @@
            <item>
             <widget class="QDoubleSpinBox" name="doubleSpinBoxXAxisMin">
              <property name="decimals">
-              <number>0</number>
+              <number>4</number>
              </property>
             </widget>
            </item>
@@ -163,7 +163,7 @@
            <item>
             <widget class="QDoubleSpinBox" name="doubleSpinBoxXAxisMax">
              <property name="decimals">
-              <number>0</number>
+              <number>4</number>
              </property>
             </widget>
            </item>

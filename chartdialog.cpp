@@ -42,23 +42,23 @@ void chartDialog::prepareChart()
     xAxis->setTitleText("Czas pomiaru, s");
     yAxis->setTitleText("Przewodność elektryczna, μS");
 
-    xAxisMin = xAxis->min();
-    xAxisMax = xAxis->max();
-    yAxisMin = yAxis->min();
-    yAxisMax = yAxis->max();
+    _xAxisMin = xAxis->min();
+    _xAxisMax = xAxis->max();
+    _yAxisMin = yAxis->min();
+    _yAxisMax = yAxis->max();
 
-    qDebug() << xAxisMin << xAxisMax << yAxisMin << yAxisMax;
+    qDebug() << _xAxisMin << _xAxisMax << _yAxisMin << _yAxisMax;
 
-    ui->doubleSpinBoxXAxisMin->setMinimum(xAxisMin);
-    ui->doubleSpinBoxXAxisMax->setMaximum(xAxisMax);
-    ui->doubleSpinBoxYAxisMin->setMinimum(yAxisMin);
-    ui->doubleSpinBoxYAxisMax->setMaximum(yAxisMax);
+    ui->doubleSpinBoxXAxisMin->setMinimum(_xAxisMin);
+    ui->doubleSpinBoxXAxisMax->setMaximum(_xAxisMax);
+    ui->doubleSpinBoxYAxisMin->setMinimum(_yAxisMin);
+    ui->doubleSpinBoxYAxisMax->setMaximum(_yAxisMax);
 
 
-    ui->doubleSpinBoxXAxisMin->setValue(xAxisMin);
-    ui->doubleSpinBoxXAxisMax->setValue(xAxisMax);
-    ui->doubleSpinBoxYAxisMin->setValue(yAxisMin);
-    ui->doubleSpinBoxYAxisMax->setValue(yAxisMax);
+    ui->doubleSpinBoxXAxisMin->setValue(_xAxisMin);
+    ui->doubleSpinBoxXAxisMax->setValue(_xAxisMax);
+    ui->doubleSpinBoxYAxisMin->setValue(_yAxisMin);
+    ui->doubleSpinBoxYAxisMax->setValue(_yAxisMax);
 
 
     ui->chartView->setChart(_chart);
@@ -117,27 +117,27 @@ void chartDialog::convertToDimensionlessTime()
         }
     }
 
-    QValueAxis *axisX = qobject_cast<QValueAxis*>(_chart->axisX());
-        if (axisX)
-        {
-            double minX = _lineSeries.at(0)->at(0).x();
-            double maxX = _lineSeries.at(0)->at(0).x();
+    // QValueAxis *axisX = qobject_cast<QValueAxis*>(_chart->axisX());
+    //     if (axisX)
+    //     {
+    //         double minX = _lineSeries.at(0)->at(0).x();
+    //         double maxX = _lineSeries.at(0)->at(0).x();
 
-            foreach (QLineSeries *series, _lineSeries)
-            {
-                for (int i = 0; i < series->count(); ++i)
-                {
-                    double xValue = series->at(i).x();
-                    if (xValue < minX) minX = xValue;
-                    if (xValue > maxX) maxX = xValue;
-                }
-            }
+    //         foreach (QLineSeries *series, _lineSeries)
+    //         {
+    //             for (int i = 0; i < series->count(); ++i)
+    //             {
+    //                 double xValue = series->at(i).x();
+    //                 if (xValue < minX) minX = xValue;
+    //                 if (xValue > maxX) maxX = xValue;
+    //             }
+    //         }
 
-            axisX->setRange(minX, maxX);
-        }
+    //         axisX->setRange(minX, maxX);
+    //     }
 
-        // Odświeżenie wykresu
-        _chart->update();
+    //     // Odświeżenie wykresu
+    //     _chart->update();
 
 }
 
@@ -176,15 +176,15 @@ void chartDialog::adjustChartScale()
         }
     }
 
-    xAxisMin = minXValue;
-    xAxisMax = maxXValue;
-    yAxisMin = minYValue;
-    yAxisMax = maxYValue;
+    _xAxisMin = minXValue;
+    _xAxisMax = maxXValue;
+    _yAxisMin = minYValue;
+    _yAxisMax = maxYValue;
 
-    ui->doubleSpinBoxXAxisMin->setValue(xAxisMin);
-    ui->doubleSpinBoxXAxisMax->setValue(xAxisMax);
-    ui->doubleSpinBoxYAxisMin->setValue(yAxisMin);
-    ui->doubleSpinBoxYAxisMax->setValue(yAxisMax);
+    ui->doubleSpinBoxXAxisMin->setValue(_xAxisMin);
+    ui->doubleSpinBoxXAxisMax->setValue(_xAxisMax);
+    ui->doubleSpinBoxYAxisMin->setValue(_yAxisMin);
+    ui->doubleSpinBoxYAxisMax->setValue(_yAxisMax);
 }
 
 QVector<QLineSeries *> chartDialog::lineSeries() const
@@ -326,6 +326,59 @@ double chartDialog::calculateStandardDeviation(QLineSeries *series)
     return standardDeviation;
 }
 
+void chartDialog::setMinMaxAxisValues()
+{
+    double minXValue = 0;
+    double maxXValue = 0;
+    double minYValue = 0;
+    double maxYValue = 0;
+    bool emptyValues = true;
+
+    foreach (QLineSeries *series, _lineSeries)
+    {
+         foreach (const QPointF &point, series->points())
+         {
+             if(emptyValues)
+             {
+                 minXValue = point.x();
+                 minYValue = point.y();
+                 maxXValue = point.x();
+                 minYValue = point.y();
+                 emptyValues = false;
+             }
+
+             if (point.x() < minXValue)
+                 minXValue = point.x();
+             if (point.y() < minYValue)
+                 minYValue = point.y();
+             if (point.x() > maxXValue)
+                 maxXValue = point.x();
+             if (point.y() > maxYValue)
+                 maxYValue = point.y();
+         }
+    }
+
+    QValueAxis *xAxis = qobject_cast<QValueAxis *>(_chart->axes(Qt::Horizontal).at(0));
+    QValueAxis *yAxis = qobject_cast<QValueAxis *>(_chart->axes(Qt::Vertical).at(0));
+    xAxis->setRange(minXValue,maxXValue);
+    yAxis->setRange(minYValue,maxYValue);
+
+    _xAxisMin = minXValue;
+    _xAxisMax = maxXValue;
+    _yAxisMin = minYValue;
+    _yAxisMax = maxYValue;
+
+    ui->doubleSpinBoxXAxisMin->setMinimum(_xAxisMin);
+    ui->doubleSpinBoxXAxisMax->setMaximum(_xAxisMax);
+    ui->doubleSpinBoxYAxisMin->setMinimum(_yAxisMin);
+    ui->doubleSpinBoxYAxisMax->setMaximum(_yAxisMax);
+
+    ui->doubleSpinBoxXAxisMin->setValue(_xAxisMin);
+    ui->doubleSpinBoxXAxisMax->setValue(_xAxisMax);
+    ui->doubleSpinBoxYAxisMin->setValue(_yAxisMin);
+    ui->doubleSpinBoxYAxisMax->setValue(_yAxisMax);
+}
+
 void chartDialog::setVisibleDimensionlessTime(bool visible)
 {
     ui->labelLiquidFlow->setVisible(visible);
@@ -442,29 +495,29 @@ void chartDialog::on_checkBoxSeries6_stateChanged(int arg1)
 
 void chartDialog::on_doubleSpinBoxXAxisMin_valueChanged(double arg1)
 {
-    xAxisMin = arg1;
-    _chart->axisX()->setMin(xAxisMin);
+    _xAxisMin = arg1;
+    _chart->axisX()->setMin(_xAxisMin);
 }
 
 
 void chartDialog::on_doubleSpinBoxXAxisMax_valueChanged(double arg1)
 {
-    xAxisMax = arg1;
-    _chart->axisX()->setMax(xAxisMax);
+    _xAxisMax = arg1;
+    _chart->axisX()->setMax(_xAxisMax);
 }
 
 
 void chartDialog::on_doubleSpinBoxYAxisMin_valueChanged(double arg1)
 {
-    yAxisMin = arg1;
-    _chart->axisY()->setMin(yAxisMin);
+    _yAxisMin = arg1;
+    _chart->axisY()->setMin(_yAxisMin);
 }
 
 
 void chartDialog::on_doubleSpinBoxYAxisMax_valueChanged(double arg1)
 {
-    yAxisMax = arg1;
-    _chart->axisY()->setMax(yAxisMax);
+    _yAxisMax = arg1;
+    _chart->axisY()->setMax(_yAxisMax);
 }
 
 
@@ -536,6 +589,7 @@ void chartDialog::on_pushButtonSaveChart_clicked()
 void chartDialog::on_pushButtonCalculateTime_clicked()
 {
     convertToDimensionlessTime();
+    setMinMaxAxisValues();
 }
 
 

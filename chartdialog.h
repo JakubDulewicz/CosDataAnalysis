@@ -26,6 +26,7 @@ public:
     void removeInvalidFirstPoints();
     double calculateStandardDeviation(QLineSeries *series);
 
+    void setMinMaxAxisValues();
     void setSeriesVisible(int seriesNumber, bool visible);
     void setVisibleDimensionlessTime(bool visible);
     void setVisibleEmptySeriesCheckBoxes();
@@ -76,10 +77,10 @@ private:
     QVector<QLineSeries*> _untouchedLineSeries;
     QChart *_chart;
 
-    double xAxisMin;
-    double xAxisMax;
-    double yAxisMin;
-    double yAxisMax;
+    double _xAxisMin;
+    double _xAxisMax;
+    double _yAxisMin;
+    double _yAxisMax;
 };
 
 #endif // CHARTDIALOG_H
