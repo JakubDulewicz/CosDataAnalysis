@@ -14,6 +14,7 @@ QString FileManager::loadDataFromFile()
     if(_csvFile.open(QIODevice::ReadOnly))
     {
         QTextStream stream (&_csvFile);
+        _dataList.clear();
         while(stream.atEnd() == false)
         {
             QString data = stream.readLine();

@@ -30,6 +30,7 @@ private slots:
 private:
     Ui::MainWindow *ui;
     FileManager _fileManager;
+    void initLineSeries();
     int _tableColumnNumber;
     int _tableRowNumber;
 

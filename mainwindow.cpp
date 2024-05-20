@@ -12,15 +12,20 @@ MainWindow::MainWindow(QWidget *parent)
     setWindowTitle("Aplikacja do analizy danych procesu COS");
 
 
-    for (int i = 0; i < 6; ++i)
-        _lineSeries.append(new QLineSeries());
-
+    initLineSeries();
     ui->tableData->setEditTriggers(QAbstractItemView::DoubleClicked | QAbstractItemView::EditKeyPressed);
 }
 
 MainWindow::~MainWindow()
 {
     delete ui;
+}
+
+void MainWindow::initLineSeries()
+{
+    _lineSeries.clear();
+    for (int i = 0; i < 6; ++i)
+        _lineSeries.append(new QLineSeries());
 }
 
 void MainWindow::clearData()
@@ -42,25 +47,27 @@ void MainWindow::clearData()
     _series4.clear();
     _series5.clear();
     _series6.clear();
-    _lineSeries.clear();
+    initLineSeries();
 }
 
 
 void MainWindow::on_pushButton_clicked()
 {
-    if(!ui->filePath->text().isEmpty())
-        clearData();
-
     QString path = _fileManager.loadDataFromFile();
-    ui->filePath->setText(path);
-    loadFileDataToTable();
-    if(!ui->filePath->text().isEmpty())
-        ui->pushButton_2->setEnabled(true);
+
+    if(!path.isEmpty())
+    {
+        ui->filePath->setText(path);
+        clearData();
+        loadFileDataToTable();
+        createLineSeries();
+    }
+
+    ui->pushButton_2->setEnabled(!ui->filePath->text().isEmpty());
 }
 
 void MainWindow::on_pushButton_2_clicked()
 {
-    createLineSeries();
     chartDialog dialog;
     dialog.setWindowFlags(Qt::Window);
     dialog.setLineSeries(_lineSeries);
