@@ -25,6 +25,7 @@ public:
     void unifySeriesVisibility();
     void removeInvalidFirstPoints();
     double calculateStandardDeviation(QLineSeries *series);
+    void reloadChartParameters();
 
     void setMinMaxAxisValues();
     void setSeriesVisible(int seriesNumber, bool visible);

@@ -58,9 +58,12 @@ void chartDialog::prepareChart()
     _yAxisMin = yAxis->min();
     _yAxisMax = yAxis->max();
 
+    _xAxisMin = 0;
+    _yAxisMin = 0;
+
     qDebug() << _xAxisMin << _xAxisMax << _yAxisMin << _yAxisMax;
 
-    ui->doubleSpinBoxXAxisMin->setMinimum(_xAxisMin);
+    ui->doubleSpinBoxXAxisMin->setMinimum(-3);
     ui->doubleSpinBoxXAxisMax->setMaximum(_xAxisMax);
     ui->doubleSpinBoxYAxisMin->setMinimum(_yAxisMin);
     ui->doubleSpinBoxYAxisMax->setMaximum(_yAxisMax);
@@ -173,6 +176,13 @@ void chartDialog::adjustChartScale()
             }
         }
     }
+    minXValue = 0;
+    minYValue = 0;
+
+    QValueAxis *xAxis = qobject_cast<QValueAxis *>(_chart->axes(Qt::Horizontal).at(0));
+    QValueAxis *yAxis = qobject_cast<QValueAxis *>(_chart->axes(Qt::Vertical).at(0));
+    xAxis->setRange(minXValue,maxXValue);
+    yAxis->setRange(minYValue,maxYValue);
 
     _xAxisMin = minXValue;
     _xAxisMax = maxXValue;
@@ -324,6 +334,19 @@ double chartDialog::calculateStandardDeviation(QLineSeries *series)
     return standardDeviation;
 }
 
+void chartDialog::reloadChartParameters()
+{
+    on_spinBoxFontSize_valueChanged(ui->spinBoxFontSize->value());
+    on_lineEditChartTitle_textChanged(ui->lineEditChartTitle->text());
+    on_lineEditSeries1_textChanged(ui->lineEditSeries1->text());
+    on_lineEditSeries2_textChanged(ui->lineEditSeries2->text());
+    on_lineEditSeries3_textChanged(ui->lineEditSeries3->text());
+    on_lineEditSeries4_textChanged(ui->lineEditSeries4->text());
+    on_lineEditSeries5_textChanged(ui->lineEditSeries5->text());
+    on_lineEditSeries6_textChanged(ui->lineEditSeries6->text());
+    on_lineEditChartTitle_textChanged(ui->lineEditChartTitle->text());
+}
+
 void chartDialog::setMinMaxAxisValues()
 {
     double minXValue = 0;
@@ -355,6 +378,8 @@ void chartDialog::setMinMaxAxisValues()
                  maxYValue = point.y();
          }
     }
+    minXValue = 0;
+    minYValue = 0;
 
     QValueAxis *xAxis = qobject_cast<QValueAxis *>(_chart->axes(Qt::Horizontal).at(0));
     QValueAxis *yAxis = qobject_cast<QValueAxis *>(_chart->axes(Qt::Vertical).at(0));
@@ -366,7 +391,10 @@ void chartDialog::setMinMaxAxisValues()
     _yAxisMin = minYValue;
     _yAxisMax = maxYValue;
 
-    ui->doubleSpinBoxXAxisMin->setMinimum(_xAxisMin);
+    // _xAxisMin = 0;
+    // _yAxisMin = 0;
+
+    ui->doubleSpinBoxXAxisMin->setMinimum(-3);
     ui->doubleSpinBoxXAxisMax->setMaximum(_xAxisMax);
     ui->doubleSpinBoxYAxisMin->setMinimum(_yAxisMin);
     ui->doubleSpinBoxYAxisMax->setMaximum(_yAxisMax);
@@ -547,11 +575,11 @@ void chartDialog::on_checkBoxReadValueError_stateChanged(int arg1)
         if(ui->checkBoxDimensionlessTracerConcentration->isChecked())
         {
             convertToDimensionlessTracerConcentration();
-            adjustChartScale();
             QValueAxis *yAxis = qobject_cast<QValueAxis *>(_chart->axes(Qt::Vertical).at(0));
             yAxis->setTitleText("Bezwymiarowe stężenie wskaźnika, - ");
         }
         adjustChartScale();
+        reloadChartParameters();
     }
 }
 
@@ -576,6 +604,7 @@ void chartDialog::on_checkBoxDimensionlessTime_stateChanged(int arg1)
 
         QValueAxis *xAxis = qobject_cast<QValueAxis *>(_chart->axes(Qt::Horizontal).at(0));
         xAxis->setTitleText("Czas pomiaru, s");
+        reloadChartParameters();
     }
 }
 
@@ -599,6 +628,7 @@ void chartDialog::on_checkBoxDimensionlessTracerConcentration_stateChanged(int a
         if(ui->checkBoxReadValueError->isChecked())
             removeInvalidFirstPoints();
         adjustChartScale();
+        reloadChartParameters();
     }
 }
 

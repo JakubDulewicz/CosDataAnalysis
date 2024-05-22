@@ -76,7 +76,7 @@ void MainWindow::on_pushButton_2_clicked()
     dialog.prepareChart();
     dialog.setVisibleEmptySeriesCheckBoxes();
     dialog.setVisibleInvalidSeries();
-    dialog.adjustChartScale();
+    dialog.setMinMaxAxisValues();
     dialog.on_spinBoxFontSize_valueChanged(10);
     dialog.exec();
 }
