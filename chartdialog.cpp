@@ -26,6 +26,7 @@ chartDialog::~chartDialog()
     _untouchedLineSeries.clear();
     _lineSeries.clear();
     ui->chartView->deleteLater();
+    on_spinBoxFontSize_valueChanged(15);
     delete _chart;
     delete ui;
 }
@@ -391,36 +392,42 @@ void chartDialog::setVisibleEmptySeriesCheckBoxes()
         _chart->legend()->markers(_lineSeries.at(0))[0]->setVisible(false);
         ui->checkBoxSeries1->setChecked(false);
         ui->checkBoxSeries1->setVisible(false);
+        ui->lineEditSeries1->setVisible(false);
     }
     if(_lineSeries.at(1)->count() == 0)
     {
         _chart->legend()->markers(_lineSeries.at(1))[0]->setVisible(false);
         ui->checkBoxSeries2->setChecked(false);
         ui->checkBoxSeries2->setVisible(false);
+        ui->lineEditSeries2->setVisible(false);
     }
     if(_lineSeries.at(2)->count() == 0)
     {
         _chart->legend()->markers(_lineSeries.at(2))[0]->setVisible(false);
         ui->checkBoxSeries3->setChecked(false);
         ui->checkBoxSeries3->setVisible(false);
+        ui->lineEditSeries3->setVisible(false);
     }
     if(_lineSeries.at(3)->count() == 0)
     {
         _chart->legend()->markers(_lineSeries.at(3))[0]->setVisible(false);
         ui->checkBoxSeries4->setChecked(false);
         ui->checkBoxSeries4->setVisible(false);
+        ui->lineEditSeries4->setVisible(false);
     }
     if(_lineSeries.at(4)->count() == 0)
     {
         _chart->legend()->markers(_lineSeries.at(4))[0]->setVisible(false);
         ui->checkBoxSeries5->setEnabled(false);
         ui->checkBoxSeries5->setVisible(false);
+        ui->lineEditSeries5->setVisible(false);
     }
     if(_lineSeries.at(5)->count() == 0)
     {
         _chart->legend()->markers(_lineSeries.at(5))[0]->setVisible(false);
         ui->checkBoxSeries6->setEnabled(false);
         ui->checkBoxSeries6->setVisible(false);
+        ui->lineEditSeries6->setVisible(false);
     }
 }
 
@@ -610,30 +617,54 @@ void chartDialog::on_pushButtonCalculateTime_clicked()
     xAxis->setTitleText("Czas bezwymiarowy, -");
 }
 
+void chartDialog::on_lineEditSeries1_textChanged(const QString &arg1)
+{
+    _lineSeries.at(0)->setName(arg1);
+}
+
+void chartDialog::on_lineEditSeries2_textChanged(const QString &arg1)
+{
+    _lineSeries.at(1)->setName(arg1);
+}
+
+void chartDialog::on_lineEditSeries3_textChanged(const QString &arg1)
+{
+    _lineSeries.at(2)->setName(arg1);
+}
 
 
+void chartDialog::on_lineEditSeries4_textChanged(const QString &arg1)
+{
+    _lineSeries.at(3)->setName(arg1);
+}
 
 
+void chartDialog::on_lineEditSeries5_textChanged(const QString &arg1)
+{
+    _lineSeries.at(4)->setName(arg1);
+}
 
 
+void chartDialog::on_lineEditSeries6_textChanged(const QString &arg1)
+{
+    _lineSeries.at(5)->setName(arg1);
+}
 
 
+void chartDialog::on_lineEditChartTitle_textChanged(const QString &arg1)
+{
+    _chart->setTitle(arg1);
+}
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+void chartDialog::on_spinBoxFontSize_valueChanged(int arg1)
+{
+    int fontSize = arg1;
+    QFont dataFont("Arial", fontSize);
+    _chart->legend()->setFont(dataFont);
+    _chart->setTitleFont(dataFont);
+    _chart->axisX()->setLabelsFont(dataFont);
+    _chart->axisY()->setLabelsFont(dataFont);
+    _chart->axisX()->setTitleFont(dataFont);
+    _chart->axisY()->setTitleFont(dataFont);
+}
 

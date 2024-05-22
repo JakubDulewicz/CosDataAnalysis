@@ -71,6 +71,22 @@ private slots:
 
     void on_pushButtonCalculateTime_clicked();
 
+    void on_lineEditSeries1_textChanged(const QString &arg1);
+
+    void on_lineEditSeries2_textChanged(const QString &arg1);
+
+    void on_lineEditSeries3_textChanged(const QString &arg1);
+
+    void on_lineEditSeries4_textChanged(const QString &arg1);
+
+    void on_lineEditSeries5_textChanged(const QString &arg1);
+
+    void on_lineEditSeries6_textChanged(const QString &arg1);
+
+    void on_lineEditChartTitle_textChanged(const QString &arg1);
+
+    void on_spinBoxFontSize_valueChanged(int arg1);
+
 private:
     Ui::chartDialog *ui;
     QVector<QLineSeries*> _lineSeries;
