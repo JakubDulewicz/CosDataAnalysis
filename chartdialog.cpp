@@ -299,9 +299,12 @@ void chartDialog::removeInvalidFirstPoints()
         for (int i = 0; i < 6; ++i)
         {
             QLineSeries *series = qobject_cast<QLineSeries*>(_chart->series().at(i));
-            series->removePoints(0,2);
-            ui->chartView->repaint();
-            ui->chartView->update();
+            if(series->count() > 0)
+            {
+                series->removePoints(0,2);
+                ui->chartView->repaint();
+                ui->chartView->update();
+            }
         }
         on_pushButtonAutoAdjustment_clicked();
     }
