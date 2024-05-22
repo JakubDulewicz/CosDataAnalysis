@@ -8,6 +8,7 @@ chartDialog::chartDialog(QWidget *parent) :
     ui(new Ui::chartDialog)
 {
     ui->setupUi(this);
+    setWindowTitle("Wykres");
     this->showMaximized();
     _chart = new QChart();
     setVisibleDimensionlessTime(false);
@@ -549,6 +550,25 @@ void chartDialog::on_checkBoxReadValueError_stateChanged(int arg1)
 void chartDialog::on_checkBoxDimensionlessTime_stateChanged(int arg1)
 {
     setVisibleDimensionlessTime(arg1);
+    if(arg1)
+    {
+
+    }
+    else
+    {
+        setLineSeries(untouchedLineSeries());
+        convertToTimeStep();
+        prepareChart();
+        setVisibleEmptySeriesCheckBoxes();
+        unifySeriesVisibility();
+        if(ui->checkBoxReadValueError->isChecked())
+            removeInvalidFirstPoints();
+        if(ui->checkBoxDimensionlessTracerConcentration->isChecked())
+            on_checkBoxDimensionlessTime_stateChanged(1);
+
+        QValueAxis *xAxis = qobject_cast<QValueAxis *>(_chart->axes(Qt::Horizontal).at(0));
+        xAxis->setTitleText("Czas pomiaru, s");
+    }
 }
 
 
@@ -586,6 +606,8 @@ void chartDialog::on_pushButtonCalculateTime_clicked()
 {
     convertToDimensionlessTime();
     setMinMaxAxisValues();
+    QValueAxis *xAxis = qobject_cast<QValueAxis *>(_chart->axes(Qt::Horizontal).at(0));
+    xAxis->setTitleText("Czas bezwymiarowy, -");
 }
 
 
