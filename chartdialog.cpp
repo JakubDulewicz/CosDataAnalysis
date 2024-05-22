@@ -12,6 +12,7 @@ chartDialog::chartDialog(QWidget *parent) :
     this->showMaximized();
     _chart = new QChart();
     setVisibleDimensionlessTime(false);
+
     //ui->verticalLayoutRange->setAlignment(ui->pushButtonAutoAdjustment,Qt::AlignCenter);
     //ui->pushButtonAutoAdjustment->setSizePolicy(QSizePolicy::Maximum, QSizePolicy::Fixed);
 
@@ -660,8 +661,9 @@ void chartDialog::on_spinBoxFontSize_valueChanged(int arg1)
 {
     int fontSize = arg1;
     QFont dataFont("Arial", fontSize);
+    QFont titleFont("Arial", fontSize, QFont::Bold);
     _chart->legend()->setFont(dataFont);
-    _chart->setTitleFont(dataFont);
+    _chart->setTitleFont(titleFont);
     _chart->axisX()->setLabelsFont(dataFont);
     _chart->axisY()->setLabelsFont(dataFont);
     _chart->axisX()->setTitleFont(dataFont);

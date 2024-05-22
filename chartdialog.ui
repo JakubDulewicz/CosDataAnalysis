@@ -252,11 +252,14 @@
              <verstretch>0</verstretch>
             </sizepolicy>
            </property>
+           <property name="minimum">
+            <number>1</number>
+           </property>
            <property name="maximum">
             <number>30</number>
            </property>
            <property name="value">
-            <number>15</number>
+            <number>10</number>
            </property>
           </widget>
          </item>
@@ -403,7 +406,7 @@
           <enum>Qt::LeftToRight</enum>
          </property>
          <property name="text">
-          <string>Atomatyczne dostosowanie</string>
+          <string>Automatyczne dostosowanie</string>
          </property>
         </widget>
        </item>
@@ -570,7 +573,7 @@
           </sizepolicy>
          </property>
          <property name="text">
-          <string>Usuń początkowy bład odczytu</string>
+          <string>Usuń początkowy błąd odczytu</string>
          </property>
         </widget>
        </item>

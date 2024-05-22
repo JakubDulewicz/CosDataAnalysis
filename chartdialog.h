@@ -85,6 +85,7 @@ private slots:
 
     void on_lineEditChartTitle_textChanged(const QString &arg1);
 
+public slots:
     void on_spinBoxFontSize_valueChanged(int arg1);
 
 private:

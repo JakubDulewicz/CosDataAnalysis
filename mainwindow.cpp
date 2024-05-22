@@ -77,6 +77,7 @@ void MainWindow::on_pushButton_2_clicked()
     dialog.setVisibleEmptySeriesCheckBoxes();
     dialog.setVisibleInvalidSeries();
     dialog.adjustChartScale();
+    dialog.on_spinBoxFontSize_valueChanged(10);
     dialog.exec();
 }
 
